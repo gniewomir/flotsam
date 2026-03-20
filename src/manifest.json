@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Flotsam",
+  "short_name": "Flotsam",
+  "description": "Auto-close tabs after a set time unless explicitly anchored.",
+  "version": "0.1.0",
+  "permissions": ["tabs", "alarms", "storage", "contextMenus"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon-floating-16.png",
+    "32": "icons/icon-floating-32.png",
+    "48": "icons/icon-floating-48.png",
+    "128": "icons/icon-floating-128.png"
+  },
+  "action": {
+    "default_title": "Flotsam",
+    "default_icon": {
+      "16": "icons/icon-floating-16.png",
+      "24": "icons/icon-floating-24.png",
+      "32": "icons/icon-floating-32.png"
+    }
+  },
+  "options_page": "options.html"
+}
