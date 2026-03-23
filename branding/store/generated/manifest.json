@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-03-23T23:53:44.905Z",
+  "dimensions": "1280x800",
+  "note": "Five listing screenshots (Chrome Web Store max per locale).",
+  "screenshots": [
+    {
+      "file": "01-hero-stale-tabs.png",
+      "description": "Hero: Flotsam name, tagline, large icon, palette gradient (Sharp)"
+    },
+    {
+      "file": "02-floating-vs-anchored.png",
+      "description": "Toolbar icon meanings (floating vs anchored)"
+    },
+    {
+      "file": "03-auto-close-timeout.png",
+      "description": "Options: auto-close timeout"
+    },
+    {
+      "file": "04-excluded-domains.png",
+      "description": "Options: excluded domains"
+    },
+    {
+      "file": "06-never-auto-closes.png",
+      "description": "Never auto-close: composed HTML slide (palette, same copy as About)"
+    }
+  ]
+}
