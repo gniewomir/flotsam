@@ -20,6 +20,30 @@ if (!/^v\d+\.\d+\.\d+$/.test(version)) {
   process.exit(1);
 }
 
+const dirty = execSync("git status --porcelain", {
+  cwd: ROOT,
+  encoding: "utf-8",
+}).trim();
+if (dirty) {
+  console.error(
+    "Working tree is not clean. Commit or stash changes before releasing.",
+  );
+  process.exit(1);
+}
+
+const branch = execSync("git branch --show-current", {
+  cwd: ROOT,
+  encoding: "utf-8",
+}).trim();
+if (branch !== "main") {
+  console.error(
+    branch
+      ? `Release must be run from branch main (currently on "${branch}").`
+      : "Release must be run from branch main (detached HEAD).",
+  );
+  process.exit(1);
+}
+
 const semver = version.slice(1);
 
 function updateJsonFile(filePath, updater) {
@@ -44,18 +68,14 @@ updateJsonFile(manifestPath, (manifest) => {
 console.log("\nRunning npm install to sync package-lock.json...");
 execSync("npm install --package-lock-only", { cwd: ROOT, stdio: "inherit" });
 
+console.log("\nTesting formatting...");
+execSync("npm run format:check", { cwd: ROOT, stdio: "inherit" });
+console.log("\nTesting extension...");
+execSync("npm run test", { cwd: ROOT, stdio: "inherit" });
+execSync("npm run test:e2e:headless", { cwd: ROOT, stdio: "inherit" });
+
 console.log("\nBuilding extension...");
 execSync("npm run build", { cwd: ROOT, stdio: "inherit" });
-
-const zipName = `flotsam-${version}.zip`;
-execSync(`rm -f "${zipName}"`, { cwd: ROOT });
-execSync(`cd dist && zip -r "../${zipName}" .`, {
-  cwd: ROOT,
-  stdio: "inherit",
-});
-
-console.log("\nFixing formatting...");
-execSync("npm run format", { cwd: ROOT, stdio: "inherit" });
 
 const tag = version;
 console.log(`\nCommitting version bump and tagging as ${tag}...`);
@@ -71,5 +91,11 @@ execSync(`git tag -a "${tag}" -m "release flotsam ${tag}"`, {
   cwd: ROOT,
   stdio: "inherit",
 });
-
-console.log(`\nReleased ${zipName} (tagged ${tag})`);
+execSync(`git push`, {
+  cwd: ROOT,
+  stdio: "inherit",
+});
+execSync(`git push origin tag ${tag}`, {
+  cwd: ROOT,
+  stdio: "inherit",
+});
