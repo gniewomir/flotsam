@@ -104,20 +104,13 @@ chrome.storage.sync.onChanged.addListener(() => {
  */
 
 /**
- * Queue payload which uses and may mutate state
- * Will update persistence when applicable
- * @param initiator
- * @param payload
- */
-/**
- * Like `queueStateful` but returns a promise that settles when this payload has finished
- * (including persistence). Used by e2e hooks; prefer `queueStateful` for listeners.
+ * @internal Exposed only for convenience of E2E tests
  */
 export function queueStatefulAsync(
   initiator: string,
   payload: (state: State) => Promise<Partial<State>>,
 ): Promise<void> {
-  const p = taskQueue.then(async () => {
+  const promise = taskQueue.then(async () => {
     let stateChanges: Partial<State>;
     try {
       stateChanges = await payload(structuredClone(state));
@@ -151,10 +144,16 @@ export function queueStatefulAsync(
       );
     }
   });
-  taskQueue = p.catch(() => {});
-  return p as Promise<void>;
+  taskQueue = promise.catch(() => {});
+  return promise;
 }
 
+/**
+ * Queue payload which uses and may mutate state
+ * Will update persistence when applicable
+ * @param initiator
+ * @param payload
+ */
 export function queueStateful(
   initiator: string,
   payload: (state: State) => Promise<Partial<State>>,
@@ -167,7 +166,7 @@ export function queueStateful(
  * @param initiator
  * @param payload
  */
-export function queue(initiator: string, payload: () => Promise<void>) {
+export function queue(initiator: string, payload: () => Promise<void>): void {
   taskQueue = taskQueue
     .then(payload)
     .then(() => {

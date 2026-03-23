@@ -8,7 +8,9 @@ const ROOT = join(__dirname, "..");
 execSync("rm -rf dist", { cwd: ROOT, stdio: "inherit" });
 
 const e2e = process.env.FLOTSAM_E2E === "1";
-const defineFlag = e2e ? "--define:FLOTSAM_E2E=true" : "--define:FLOTSAM_E2E=false";
+const defineFlag = e2e
+  ? "--define:FLOTSAM_E2E=true"
+  : "--define:FLOTSAM_E2E=false";
 
 execSync(
   `esbuild src/service-worker/background.ts src/options/options.ts --bundle --outdir=dist --target=es2022 --platform=browser --format=iife ${defineFlag}`,

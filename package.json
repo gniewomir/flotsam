@@ -30,6 +30,7 @@
     "sharp": "^0.34.5",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.57.1",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.0",
+    "vitest-chrome": "^0.1.0"
   }
 }

@@ -77,10 +77,7 @@ test.describe("options page copy", () => {
 
     await expect(
       support.getByRole("link", { name: "Drop me an email" }),
-    ).toHaveAttribute(
-      "href",
-      "mailto:gniewomir.swiechowski+flotsam@gmail.com",
-    );
+    ).toHaveAttribute("href", "mailto:gniewomir.swiechowski+flotsam@gmail.com");
   });
 });
 
@@ -106,7 +103,10 @@ test("persists timeout changes to sync storage", async ({
     .toBe(5);
 });
 
-test("adds excluded domains with normalization", async ({ context, extensionId }) => {
+test("adds excluded domains with normalization", async ({
+  context,
+  extensionId,
+}) => {
   const optionsPage = await openOptionsPage(context, extensionId);
 
   await optionsPage.locator("#new-domain").fill("https://www.example.com/path");
@@ -249,8 +249,7 @@ test("reschedules close alarms when timeout changes in options", async ({
     .poll(async () => {
       const after = await getCloseAlarmForTab(serviceWorker, tabId);
       return (
-        after !== undefined &&
-        after.scheduledTime !== before!.scheduledTime
+        after !== undefined && after.scheduledTime !== before!.scheduledTime
       );
     })
     .toBe(true);
@@ -346,7 +345,5 @@ test("timeout change clears and recreates close-tab alarms", async ({
   await optionsPage.locator("#timeout").fill("12");
   await expect(optionsPage.locator("#timeout-status")).toHaveText("Saved.");
 
-  await expect
-    .poll(async () => countCloseAlarms(serviceWorker))
-    .toBe(before);
+  await expect.poll(async () => countCloseAlarms(serviceWorker)).toBe(before);
 });

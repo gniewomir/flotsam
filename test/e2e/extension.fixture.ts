@@ -123,14 +123,17 @@ export async function tabExists(
   serviceWorker: Worker,
   tabId: number,
 ): Promise<boolean> {
-  return serviceWorker.evaluate(async ({ id }) => {
-    try {
-      await chrome.tabs.get(id);
-      return true;
-    } catch {
-      return false;
-    }
-  }, { id: tabId });
+  return serviceWorker.evaluate(
+    async ({ id }) => {
+      try {
+        await chrome.tabs.get(id);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    { id: tabId },
+  );
 }
 
 export async function syncStorageGet(
@@ -147,18 +150,24 @@ export async function getCloseAlarmForTab(
   serviceWorker: Worker,
   tabId: number,
 ): Promise<{ scheduledTime?: number } | undefined> {
-  return serviceWorker.evaluate(async ({ id }) => {
-    return chrome.alarms.get(`close-tab-${id}`);
-  }, { id: tabId });
+  return serviceWorker.evaluate(
+    async ({ id }) => {
+      return chrome.alarms.get(`close-tab-${id}`);
+    },
+    { id: tabId },
+  );
 }
 
 export async function setActiveTab(
   serviceWorker: Worker,
   tabId: number,
 ): Promise<void> {
-  await serviceWorker.evaluate(async ({ id }) => {
-    await chrome.tabs.update(id, { active: true });
-  }, { id: tabId });
+  await serviceWorker.evaluate(
+    async ({ id }) => {
+      await chrome.tabs.update(id, { active: true });
+    },
+    { id: tabId },
+  );
 }
 
 export async function setPinned(
@@ -166,9 +175,12 @@ export async function setPinned(
   tabId: number,
   pinned: boolean,
 ): Promise<void> {
-  await serviceWorker.evaluate(async ({ id, pinned: p }) => {
-    await chrome.tabs.update(id, { pinned: p });
-  }, { id: tabId, pinned });
+  await serviceWorker.evaluate(
+    async ({ id, pinned: p }) => {
+      await chrome.tabs.update(id, { pinned: p });
+    },
+    { id: tabId, pinned },
+  );
 }
 
 /**

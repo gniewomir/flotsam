@@ -3,10 +3,7 @@ import { queue, queueStateful } from "./state";
 import { isManagedUrl } from "./utility";
 import { extractDomain } from "../utility";
 import { Configuration } from "../configuration";
-import {
-  TAB_GROUP_ID_NONE,
-  tabAllowsCloseAlarmScheduling,
-} from "./tab-eligibility";
+import { TAB_GROUP_ID_NONE, tabEligibleToBeClosed } from "./tab-eligibility";
 
 export const ALARM_PREFIX = "close-tab-";
 
@@ -22,11 +19,10 @@ export async function scheduleTabAlarm(
   try {
     if (typeof tabId !== "number") return;
     if (tabId === chrome.tabs.TAB_ID_NONE) return;
-    if (anchoredTabs.has(tabId)) return;
 
     const tab = await chrome.tabs.get(tabId);
 
-    if (!tabAllowsCloseAlarmScheduling(tab)) return;
+    if (!tabEligibleToBeClosed(tab, anchoredTabs)) return;
 
     await chrome.alarms.create(alarmName(tabId), {
       delayInMinutes: timeoutMinutes,

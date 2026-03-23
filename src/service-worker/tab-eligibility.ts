@@ -5,13 +5,11 @@ import { isManagedUrl } from "./utility";
  */
 export const TAB_GROUP_ID_NONE = -1;
 
-/**
- * Whether a tab may receive a close alarm after `chrome.tabs.get` (anchoring and tab id
- * checks are applied earlier in `scheduleTabAlarm`).
- */
-export function tabAllowsCloseAlarmScheduling(
-  tab: Pick<chrome.tabs.Tab, "pinned" | "groupId" | "audible" | "url">,
+export function tabEligibleToBeClosed(
+  tab: Pick<chrome.tabs.Tab, "pinned" | "groupId" | "audible" | "url" | "id">,
+  anchoredTabs: Set<number>,
 ): boolean {
+  if (!tab.id || anchoredTabs.has(tab.id)) return false;
   if (tab.pinned === true) return false;
   if (tab.groupId !== TAB_GROUP_ID_NONE) return false;
   if (tab.audible === true) return false;

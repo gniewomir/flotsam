@@ -4,7 +4,13 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const playwrightCli = join(ROOT, "node_modules", "@playwright", "test", "cli.js");
+const playwrightCli = join(
+  ROOT,
+  "node_modules",
+  "@playwright",
+  "test",
+  "cli.js",
+);
 
 const rawArgs = process.argv.slice(2);
 const headless = rawArgs.includes("--headless");
