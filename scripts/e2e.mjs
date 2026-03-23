@@ -10,7 +10,11 @@ const rawArgs = process.argv.slice(2);
 const headless = rawArgs.includes("--headless");
 const pwArgs = rawArgs.filter((a) => a !== "--headless");
 
-execSync("node scripts/build.mjs", { cwd: ROOT, stdio: "inherit" });
+execSync("node scripts/build.mjs", {
+  cwd: ROOT,
+  stdio: "inherit",
+  env: { ...process.env, FLOTSAM_E2E: "1" },
+});
 
 const env = { ...process.env };
 if (headless) {

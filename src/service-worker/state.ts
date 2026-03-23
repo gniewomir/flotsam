@@ -79,11 +79,9 @@ let state: State = {
 };
 
 /**
- * Task queue
+ * Task queue (chain-only; payload return types vary)
  */
-let taskQueue: Promise<Partial<State>> = Promise.resolve(
-  {} satisfies Partial<State>,
-);
+let taskQueue: Promise<unknown> = Promise.resolve({});
 
 void queue("initial - state - configuration load", async () => {
   state = structuredClone({ ...state, ...(await loadConfiguration()) });
@@ -111,44 +109,57 @@ chrome.storage.sync.onChanged.addListener(() => {
  * @param initiator
  * @param payload
  */
-export function queueStateful(
+/**
+ * Like `queueStateful` but returns a promise that settles when this payload has finished
+ * (including persistence). Used by e2e hooks; prefer `queueStateful` for listeners.
+ */
+export function queueStatefulAsync(
   initiator: string,
   payload: (state: State) => Promise<Partial<State>>,
-): void {
-  taskQueue = taskQueue
-    .then(() => payload(structuredClone(state)))
-    .catch((error: Error) => {
+): Promise<void> {
+  const p = taskQueue.then(async () => {
+    let stateChanges: Partial<State>;
+    try {
+      stateChanges = await payload(structuredClone(state));
+    } catch (error) {
       logError(
         `Error while running payload for initiator "${initiator}"`,
-        error,
+        error as Error,
       );
-      return {};
-    })
-    .then(async (stateChanges: Partial<State>) => {
-      if (Object.keys(stateChanges).length === 0) {
-        return {};
-      }
-      const previousState = state;
-      const nextState = { ...state, ...stateChanges };
-      state = nextState;
-      logState(
-        `State transition triggered by initiator "${initiator}"`,
-        previousState,
-        nextState,
-      );
+      stateChanges = {};
+    }
+    if (Object.keys(stateChanges).length === 0) {
+      return;
+    }
+    const previousState = state;
+    const nextState = { ...state, ...stateChanges };
+    state = nextState;
+    logState(
+      `State transition triggered by initiator "${initiator}"`,
+      previousState,
+      nextState,
+    );
+    try {
       await Promise.all([
         updateConfiguration(stateChanges),
         updateSession(stateChanges),
       ]);
-      return {};
-    })
-    .catch((error: Error) => {
+    } catch (error) {
       logError(
         `Error while running payload for initiator "${initiator}" - failed to update configuration or session`,
-        error,
+        error as Error,
       );
-      return {};
-    });
+    }
+  });
+  taskQueue = p.catch(() => {});
+  return p as Promise<void>;
+}
+
+export function queueStateful(
+  initiator: string,
+  payload: (state: State) => Promise<Partial<State>>,
+): void {
+  void queueStatefulAsync(initiator, payload);
 }
 
 /**
