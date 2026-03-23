@@ -1,14 +1,14 @@
 {
   "name": "flotsam-extension",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "private": true,
   "engines": {
     "node": ">=22.20.0"
   },
   "scripts": {
-    "build": "rm -rf dist && esbuild src/background.ts --bundle --outdir=dist --target=es2022 && cp src/manifest.json src/about.html src/options.html src/options.js dist/ && node scripts/generate-icons.mjs",
+    "build": "node scripts/build.mjs",
     "typecheck": "tsc -p . --noEmit",
-    "watch": "mkdir -p dist && cp src/manifest.json src/about.html src/options.html src/options.js dist/ && node scripts/generate-icons.mjs && esbuild src/background.ts --bundle --outdir=dist --target=es2022 --watch",
+    "watch": "node scripts/watch.mjs",
     "release": "node scripts/release.mjs",
     "test": "vitest run",
     "lint": "eslint",

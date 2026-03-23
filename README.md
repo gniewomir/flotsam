@@ -11,31 +11,25 @@ Tabs accumulate. What starts as a quick lookup turns into dozens of stale pages 
 ### Basics
 
 1. Install the extension.
-2. Each tab on a **managed domain** (standard **http** or **https** addresses) gets a countdown (default **10 minutes**; you can change this in **Flotsam Settings**).
-3. When the countdown finishes, that tab closes automatically.
-4. Click the toolbar icon to **anchor** the current tab — it stays open until you unanchor it.
-5. Click again to **unanchor**; the countdown applies again from there.
-
-### Which tab is timed
-
-Only tabs that are **in the background** run their countdown. The tab you are looking at does not count down. When you switch to another tab, the one you left gets a **new** full countdown.
+2. Each tab on a **managed domain** (standard **http** or **https** addresses) gets a countdown (default **15 minutes**; you can change this in **Flotsam Settings**).
+3. If you change the timeout value, Flotsam resets timers using the new value.
+4. When the countdown finishes, that tab closes automatically.
+5. Click the toolbar icon to **anchor** the current tab — it stays open until you unanchor it.
+6. Click again to **unanchor**; the countdown applies again from there.
 
 ### Domains you want to exclude
 
-You can **exclude entire domains** so their tabs are never auto-closed. Add or remove exclusions in **Flotsam Settings**, or right-click the extension icon and use the menu for the **current tab’s domain**. Excluding **example.com** also covers subdomains such as **www.example.com**.
+You can **exclude entire domains** so their tabs are never auto-closed. Add or remove exclusions in **Flotsam Settings**, or right-click the extension icon and choose **Exclude tab domain** for the **current tab’s domain**. Excluding **example.com** also covers subdomains such as **www.example.com**.
 
 ### What Flotsam never auto-closes
 
 - **Anchored** tabs.
+- The **focused** tab.
 - **Pinned** tabs.
-- **Grouped** tabs (tabs in any tab group).
+- **Grouped** tabs.
 - Tabs on **excluded** domains.
 - Tabs the browser treats as **audible** (playing sound). Muted tabs and silent playback are not treated as audible.
 - Tabs **outside normal web domains** (anything that isn’t a standard **http** or **https** tab) — for example built-in browser pages, settings, or local files opened in the browser. **Flotsam only applies to http and https tabs.**
-
-### Windows
-
-If Flotsam closes the **last tab** in a window, that window closes too. That is intentional.
 
 ## Development
 
