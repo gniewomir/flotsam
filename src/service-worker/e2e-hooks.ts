@@ -1,7 +1,7 @@
 import { queueStatefulAsync } from "./state";
-import { toggleAnchorForManagedTab } from "./anchor-actions";
-import { excludeDomainFromManagedUrl } from "./extension-actions";
 import { isManagedUrl } from "./utility";
+import { excludeDomain } from "./extension";
+import { toggleAnchorForManagedTab } from "./anchor";
 
 type E2eMessage =
   | { type: "e2e-toggle-anchor"; tabId: number }
@@ -35,7 +35,7 @@ if (FLOTSAM_E2E) {
       if (message?.type === "e2e-exclude-domain") {
         void queueStatefulAsync("e2e-exclude-domain", async (state) => {
           const tab = await waitForTabLoad(message.tabId);
-          return excludeDomainFromManagedUrl(state, tab.url);
+          return excludeDomain(state, tab.url);
         }).then(() => sendResponse({ ok: true }));
         return true;
       }
