@@ -1,56 +1,18 @@
 import {
     test as base,
-    chromium,
     expect,
     type BrowserContext,
     type Page,
     type Worker,
 } from "@playwright/test";
-import { existsSync } from "fs";
 import { mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
-import { join, resolve } from "path";
-
-const extensionPath = resolve(process.cwd(), "dist");
-
-function resolveChromiumExecutablePath(): string | undefined {
-    if (process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH) {
-        return process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
-    }
-
-    const browsersRoot = process.env.PLAYWRIGHT_BROWSERS_PATH;
-    if (!browsersRoot) {
-        return undefined;
-    }
-
-    const armPath = join(
-        browsersRoot,
-        "chromium-1208",
-        "chrome-mac-arm64",
-        "Google Chrome for Testing.app",
-        "Contents",
-        "MacOS",
-        "Google Chrome for Testing",
-    );
-    if (existsSync(armPath)) {
-        return armPath;
-    }
-
-    const x64Path = join(
-        browsersRoot,
-        "chromium-1208",
-        "chrome-mac-x64",
-        "Google Chrome for Testing.app",
-        "Contents",
-        "MacOS",
-        "Google Chrome for Testing",
-    );
-    if (existsSync(x64Path)) {
-        return x64Path;
-    }
-
-    return undefined;
-}
+import { join } from "path";
+import {
+    launchExtensionContext,
+    waitForExtensionId,
+    waitForServiceWorker,
+} from "../helpers/extension-context";
 
 type ExtensionFixture = {
     context: BrowserContext;
@@ -63,15 +25,9 @@ export const test = base.extend<ExtensionFixture>({
     // eslint-disable-next-line no-empty-pattern -- no upstream fixtures
     context: async ({}, use) => {
         const userDataDir = await mkdtemp(join(tmpdir(), "flotsam-e2e-"));
-        const executablePath = resolveChromiumExecutablePath();
-        const context = await chromium.launchPersistentContext(userDataDir, {
-            channel: executablePath ? undefined : "chromium",
-            executablePath,
+        const context = await launchExtensionContext({
+            userDataDir,
             headless: process.env.HEADLESS === "1",
-            args: [
-                `--disable-extensions-except=${extensionPath}`,
-                `--load-extension=${extensionPath}`,
-            ],
         });
         const bootstrapPage = await context.newPage();
         await bootstrapPage.goto("about:blank");
@@ -80,13 +36,11 @@ export const test = base.extend<ExtensionFixture>({
         await context.close();
     },
     serviceWorker: async ({ context }, use) => {
-        const serviceWorker =
-            context.serviceWorkers()[0] ??
-            (await context.waitForEvent("serviceworker", { timeout: 30_000 }));
+        const serviceWorker = await waitForServiceWorker(context);
         await use(serviceWorker);
     },
-    extensionId: async ({ serviceWorker }, use) => {
-        const extensionId = new URL(serviceWorker.url()).host;
+    extensionId: async ({ context }, use) => {
+        const extensionId = await waitForExtensionId(context);
         await use(extensionId);
     },
 });

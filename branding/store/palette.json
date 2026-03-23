@@ -1,0 +1,112 @@
+{
+    "meta": {
+        "title": "Flotsam — Chrome Web Store & promo palette",
+        "description": "Canonical colors for listing screenshots (Sharp composites), composed HTML slides, and promotional tiles. Edit here and regenerate assets with npm run store:all.",
+        "related": ["README.md"]
+    },
+    "listing": {
+        "canvas": {
+            "hex": "#e8eef5",
+            "usage": "Letterboxing / fit-to-store background (Sharp)"
+        },
+        "footerBar": {
+            "hex": "#1a2b3c",
+            "usage": "Hero image bottom caption strip"
+        },
+        "footerText": {
+            "hex": "#e8eef5",
+            "usage": "Text on footer strip"
+        },
+        "cardFrame": {
+            "maxWidthRatio": 1,
+            "maxHeightRatio": 1,
+            "usage": "Options card screenshots (03/04): card scaled to fit within this fraction of the 1280×800 frame (1 = full frame, letterboxed on listing.canvas if aspect differs), centered"
+        }
+    },
+    "splitPanel": {
+        "leftBackground": {
+            "hex": "#dae4f0",
+            "usage": "Floating column background (02-floating-vs-anchored)"
+        },
+        "rightBackground": {
+            "hex": "#c8d6e8",
+            "usage": "Anchored column background"
+        },
+        "heading": {
+            "hex": "#1a2b3c",
+            "usage": "Column titles (Floating / Anchored)"
+        },
+        "subtitle": {
+            "hex": "#333344",
+            "usage": "Tooltip phrase text under icons"
+        }
+    },
+    "heroSlide": {
+        "gradientTop": {
+            "hex": "#dde8f2",
+            "usage": "01 hero slide: vertical gradient top (blueish)"
+        },
+        "gradientBottom": {
+            "hex": "#8fa9c4",
+            "usage": "01 hero slide: gradient bottom"
+        },
+        "title": {
+            "hex": "#0d2840",
+            "usage": "01 hero: extension name"
+        },
+        "subtitle": {
+            "hex": "#1a2b3c",
+            "usage": "01 hero: tagline (two lines)"
+        }
+    },
+    "promo": {
+        "smallGradient": {
+            "start": {
+                "hex": "#1a5a8a",
+                "usage": "Small promo 440×280 gradient top-left"
+            },
+            "end": {
+                "hex": "#0d2840",
+                "usage": "Small promo gradient bottom-right"
+            }
+        },
+        "marqueeGradient": {
+            "stops": [
+                {
+                    "hex": "#0d3d66",
+                    "usage": "Marquee left stop"
+                },
+                {
+                    "hex": "#1a6a9e",
+                    "usage": "Marquee center stop"
+                },
+                {
+                    "hex": "#0d2840",
+                    "usage": "Marquee right stop"
+                }
+            ]
+        }
+    },
+    "neverAutoCloseSlide": {
+        "gradientTop": {
+            "hex": "#dde5ee",
+            "usage": "06 slide background gradient top (composed HTML)"
+        },
+        "gradientBottom": {
+            "hex": "#e8eef5",
+            "usage": "06 slide background gradient bottom"
+        },
+        "heading": {
+            "hex": "#000000",
+            "usage": "Slide title (matches options About copy)"
+        },
+        "body": {
+            "hex": "#000000",
+            "usage": "List body and strong (black text)"
+        },
+        "bullet": {
+            "hex": "#6b7b8c",
+            "usage": "List marker color (muted, like options)"
+        }
+    }
+}
