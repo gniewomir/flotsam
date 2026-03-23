@@ -5,8 +5,7 @@ import { isManagedUrl } from "./utility";
 import { extractDomain } from "../utility";
 
 export const EXCLUDE_DOMAIN_CONTEXT_MENU_ID = "flotsam-exclude-domain" as const;
-export const EXCLUDE_DOMAIN_CONTEXT_MENU_TITLE_MANAGED =
-    "Exclude tab domain" as const;
+export const EXCLUDE_DOMAIN_CONTEXT_MENU_TITLE_MANAGED = "Exclude tab domain" as const;
 
 async function registerContextmenu() {
     await chrome.contextMenus.removeAll();
@@ -21,10 +20,7 @@ async function registerContextmenu() {
             } satisfies chrome.contextMenus.CreateProperties,
             () => {
                 if (chrome.runtime.lastError) {
-                    logError(
-                        "Failed to create context menu",
-                        chrome.runtime.lastError.message,
-                    );
+                    logError("Failed to create context menu", chrome.runtime.lastError.message);
                     reject(chrome.runtime.lastError);
                 }
                 resolve();
@@ -59,10 +55,7 @@ chrome.runtime.onStartup.addListener(() => {
 /**
  * Add the tab's hostname to excluded domains (same rules as the context menu).
  */
-export function excludeDomain(
-    state: State,
-    url: string | undefined,
-): Partial<State> {
+export function excludeDomain(state: State, url: string | undefined): Partial<State> {
     if (!isManagedUrl(url)) return {};
     const domain = extractDomain(url);
     if (!domain) return {};
@@ -75,14 +68,11 @@ export function excludeDomain(
 }
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-    queueStateful(
-        "chrome.contextMenus.onClicked - exclude domain",
-        async (state) => {
-            if (info.menuItemId !== EXCLUDE_DOMAIN_CONTEXT_MENU_ID) return {};
+    queueStateful("chrome.contextMenus.onClicked - exclude domain", async (state) => {
+        if (info.menuItemId !== EXCLUDE_DOMAIN_CONTEXT_MENU_ID) return {};
 
-            return excludeDomain(state, tab?.url);
-        },
-    );
+        return excludeDomain(state, tab?.url);
+    });
     queue("chrome.contextMenus.onClicked", async () => {
         await chrome.runtime.openOptionsPage();
     });

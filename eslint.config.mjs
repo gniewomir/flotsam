@@ -45,6 +45,21 @@ export default tseslint.config(
         },
     },
     {
+        files: ["**/*.ts", "**/*.mjs", "**/*.cjs"],
+        rules: {
+            "max-len": [
+                "error",
+                {
+                    code: 100,
+                    tabWidth: 4,
+                    ignoreComments: true,
+                    ignoreUrls: true,
+                    ignorePattern: "^\\s*(import\\s|export\\s)",
+                },
+            ],
+        },
+    },
+    {
         ignores: ["dist/", "node_modules/", "scripts/"],
     },
 );

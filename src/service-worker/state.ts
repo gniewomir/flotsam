@@ -91,15 +91,12 @@ void queue("initial - state - session load", async () => {
 });
 
 chrome.storage.sync.onChanged.addListener(() => {
-    queue(
-        "chrome.storage.sync.onChanged - state - reloaded configuration",
-        async () => {
-            state = structuredClone({
-                ...state,
-                ...(await loadConfiguration()),
-            });
-        },
-    );
+    queue("chrome.storage.sync.onChanged - state - reloaded configuration", async () => {
+        state = structuredClone({
+            ...state,
+            ...(await loadConfiguration()),
+        });
+    });
 });
 
 /**
@@ -118,10 +115,7 @@ export function queueStatefulAsync(
         try {
             stateChanges = await payload(structuredClone(state));
         } catch (error) {
-            logError(
-                `Error while running payload for initiator "${initiator}"`,
-                error as Error,
-            );
+            logError(`Error while running payload for initiator "${initiator}"`, error as Error);
             stateChanges = {};
         }
         if (Object.keys(stateChanges).length === 0) {
@@ -136,13 +130,11 @@ export function queueStatefulAsync(
             nextState,
         );
         try {
-            await Promise.all([
-                updateConfiguration(stateChanges),
-                updateSession(stateChanges),
-            ]);
+            await Promise.all([updateConfiguration(stateChanges), updateSession(stateChanges)]);
         } catch (error) {
             logError(
-                `Error while running payload for initiator "${initiator}" - failed to update configuration or session`,
+                `Error while running payload for initiator "${initiator}" - ` +
+                    `failed to update configuration or session`,
                 error as Error,
             );
         }
@@ -176,10 +168,7 @@ export function queue(initiator: string, payload: () => Promise<void>): void {
             return {};
         })
         .catch((error: Error) => {
-            logError(
-                `Error while running payload for initiator ${initiator}`,
-                error,
-            );
+            logError(`Error while running payload for initiator ${initiator}`, error);
             return {};
         });
 }

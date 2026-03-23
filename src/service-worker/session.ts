@@ -9,17 +9,11 @@ export type SessionStorage = {
     anchoredTabs: number[];
 };
 
-export async function updateSession(
-    sessionChanges: Partial<Session>,
-): Promise<void> {
+export async function updateSession(sessionChanges: Partial<Session>): Promise<void> {
     const update: Partial<SessionStorage> = {};
 
-    const anchoredTabsKey = "anchoredTabs" satisfies keyof Session &
-        keyof SessionStorage;
-    if (
-        anchoredTabsKey in sessionChanges &&
-        sessionChanges[anchoredTabsKey] !== undefined
-    ) {
+    const anchoredTabsKey = "anchoredTabs" satisfies keyof Session & keyof SessionStorage;
+    if (anchoredTabsKey in sessionChanges && sessionChanges[anchoredTabsKey] !== undefined) {
         update[anchoredTabsKey] = Array.from(sessionChanges[anchoredTabsKey]);
     }
 
@@ -31,9 +25,7 @@ export async function updateSession(
 
 export async function loadSession(): Promise<Session> {
     const rawSession = await chrome.storage.session.get(null);
-    const rawAnchoredTabs = Array.isArray(rawSession.anchoredTabs)
-        ? rawSession.anchoredTabs
-        : [];
+    const rawAnchoredTabs = Array.isArray(rawSession.anchoredTabs) ? rawSession.anchoredTabs : [];
     const anchoredTabs = new Set<number>(
         rawAnchoredTabs.filter((id): id is number => typeof id === "number"),
     );

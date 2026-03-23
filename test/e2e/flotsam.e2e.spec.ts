@@ -13,15 +13,10 @@ import {
 } from "./extension.fixture";
 
 test.describe("options page copy", () => {
-    test("surfaces key settings and about phrases", async ({
-        context,
-        extensionId,
-    }) => {
+    test("surfaces key settings and about phrases", async ({ context, extensionId }) => {
         const page = await openOptionsPage(context, extensionId);
 
-        await expect(page.locator('label[for="timeout"]')).toContainText(
-            "resets all timers",
-        );
+        await expect(page.locator('label[for="timeout"]')).toContainText("resets all timers");
         await expect(page.locator("#timeout")).toHaveAttribute("min", "1");
         await expect(page.locator("#timeout")).toHaveAttribute("max", "1440");
 
@@ -44,18 +39,12 @@ test.describe("options page copy", () => {
         await expect(bullets.filter({ hasText: /audible/ })).toHaveCount(1);
     });
 
-    test("support links have expected href and rel", async ({
-        context,
-        extensionId,
-    }) => {
+    test("support links have expected href and rel", async ({ context, extensionId }) => {
         const page = await openOptionsPage(context, extensionId);
         const support = page.locator("#support");
 
         const issue = support.getByRole("link", { name: "Open an issue" });
-        await expect(issue).toHaveAttribute(
-            "href",
-            "https://github.com/gniewomir/flotsam/issues",
-        );
+        await expect(issue).toHaveAttribute("href", "https://github.com/gniewomir/flotsam/issues");
         await expect(issue).toHaveAttribute("target", "_blank");
         await expect(issue).toHaveAttribute("rel", /noopener/);
 
@@ -67,17 +56,17 @@ test.describe("options page copy", () => {
             "https://github.com/gniewomir/flotsam/blob/main/CONTRIBUTING.md",
         );
 
-        await expect(
-            support.getByRole("link", { name: "Buy Me a Coffee" }),
-        ).toHaveAttribute("href", "https://ko-fi.com/I3I61GPLRC");
+        await expect(support.getByRole("link", { name: "Buy Me a Coffee" })).toHaveAttribute(
+            "href",
+            "https://ko-fi.com/I3I61GPLRC",
+        );
 
-        await expect(
-            support.getByRole("link", { name: "Visit my blog" }),
-        ).toHaveAttribute("href", "https://gniewomir.com");
+        await expect(support.getByRole("link", { name: "Visit my blog" })).toHaveAttribute(
+            "href",
+            "https://gniewomir.com",
+        );
 
-        await expect(
-            support.getByRole("link", { name: "Drop me an email" }),
-        ).toHaveAttribute(
+        await expect(support.getByRole("link", { name: "Drop me an email" })).toHaveAttribute(
             "href",
             "mailto:gniewomir.swiechowski+flotsam@gmail.com",
         );
@@ -93,43 +82,27 @@ test("loads defaults in options page", async ({ context, extensionId }) => {
     );
 });
 
-test("persists timeout changes to sync storage", async ({
-    context,
-    extensionId,
-}) => {
+test("persists timeout changes to sync storage", async ({ context, extensionId }) => {
     const optionsPage = await openOptionsPage(context, extensionId);
 
     await optionsPage.locator("#timeout").fill("5");
     await expect(optionsPage.locator("#timeout-status")).toHaveText("Saved.");
-    await expect
-        .poll(async () => syncStorageGet(optionsPage, "timeoutMinutes"))
-        .toBe(5);
+    await expect.poll(async () => syncStorageGet(optionsPage, "timeoutMinutes")).toBe(5);
 });
 
-test("adds excluded domains with normalization", async ({
-    context,
-    extensionId,
-}) => {
+test("adds excluded domains with normalization", async ({ context, extensionId }) => {
     const optionsPage = await openOptionsPage(context, extensionId);
 
-    await optionsPage
-        .locator("#new-domain")
-        .fill("https://www.example.com/path");
+    await optionsPage.locator("#new-domain").fill("https://www.example.com/path");
     await optionsPage.locator("#add-domain-btn").click();
 
-    await expect(optionsPage.locator("#domain-list li span")).toHaveText(
-        "www.example.com",
-    );
+    await expect(optionsPage.locator("#domain-list li span")).toHaveText("www.example.com");
     await expect
         .poll(async () => syncStorageGet(optionsPage, "excludedDomains"))
         .toEqual(["www.example.com"]);
 });
 
-test("does not close tabs on excluded domains", async ({
-    context,
-    extensionId,
-    serviceWorker,
-}) => {
+test("does not close tabs on excluded domains", async ({ context, extensionId, serviceWorker }) => {
     const optionsPage = await openOptionsPage(context, extensionId);
     await optionsPage.locator("#new-domain").fill("example.com");
     await optionsPage.locator("#add-domain-btn").click();
@@ -151,14 +124,10 @@ test("does not close tabs on excluded domains", async ({
     });
 
     await triggerCloseAlarm(serviceWorker, protectedTabId);
-    await expect
-        .poll(() => tabExists(serviceWorker, protectedTabId))
-        .toBe(true);
+    await expect.poll(() => tabExists(serviceWorker, protectedTabId)).toBe(true);
 });
 
-test("schedules close alarms for https and http managed tabs", async ({
-    serviceWorker,
-}) => {
+test("schedules close alarms for https and http managed tabs", async ({ serviceWorker }) => {
     const httpsId = await serviceWorker.evaluate(async () => {
         const tab = await chrome.tabs.create({
             url: "https://example.org/",
@@ -194,9 +163,7 @@ test("schedules close alarms for https and http managed tabs", async ({
         .toBe(true);
 });
 
-test("does not schedule close alarms for about:blank", async ({
-    serviceWorker,
-}) => {
+test("does not schedule close alarms for about:blank", async ({ serviceWorker }) => {
     const tabId = await serviceWorker.evaluate(async () => {
         const tab = await chrome.tabs.create({
             url: "about:blank",
@@ -206,9 +173,7 @@ test("does not schedule close alarms for about:blank", async ({
     });
     expect(tabId).toBeGreaterThan(0);
 
-    await expect
-        .poll(async () => getCloseAlarmForTab(serviceWorker, tabId))
-        .toBeUndefined();
+    await expect.poll(async () => getCloseAlarmForTab(serviceWorker, tabId)).toBeUndefined();
 });
 
 test("does not close the active tab when its close alarm fires (reschedules instead)", async ({
@@ -222,9 +187,7 @@ test("does not close the active tab when its close alarm fires (reschedules inst
         return tab.id ?? -1;
     });
     await triggerCloseAlarm(serviceWorker, soloTabId);
-    await expect
-        .poll(() => tabExists(serviceWorker, soloTabId), { timeout: 15_000 })
-        .toBe(true);
+    await expect.poll(() => tabExists(serviceWorker, soloTabId), { timeout: 15_000 }).toBe(true);
 });
 
 test("reschedules close alarms when timeout changes in options", async ({
@@ -241,9 +204,7 @@ test("reschedules close alarms when timeout changes in options", async ({
     });
     expect(tabId).toBeGreaterThan(0);
 
-    await expect
-        .poll(() => getCloseAlarmForTab(serviceWorker, tabId))
-        .toBeDefined();
+    await expect.poll(() => getCloseAlarmForTab(serviceWorker, tabId)).toBeDefined();
 
     const before = await getCloseAlarmForTab(serviceWorker, tabId);
     expect(before?.scheduledTime).toBeDefined();
@@ -255,17 +216,12 @@ test("reschedules close alarms when timeout changes in options", async ({
     await expect
         .poll(async () => {
             const after = await getCloseAlarmForTab(serviceWorker, tabId);
-            return (
-                after !== undefined &&
-                after.scheduledTime !== before!.scheduledTime
-            );
+            return after !== undefined && after.scheduledTime !== before!.scheduledTime;
         })
         .toBe(true);
 });
 
-test("does not close pinned tabs when alarm fires", async ({
-    serviceWorker,
-}) => {
+test("does not close pinned tabs when alarm fires", async ({ serviceWorker }) => {
     const tabId = await serviceWorker.evaluate(async () => {
         const tab = await chrome.tabs.create({
             url: "https://example.com/pinned-tab",
@@ -284,11 +240,7 @@ test("does not close pinned tabs when alarm fires", async ({
     await expect.poll(() => tabExists(serviceWorker, tabId)).toBe(true);
 });
 
-test("e2e hook: anchored tab survives alarm", async ({
-    context,
-    extensionId,
-    serviceWorker,
-}) => {
+test("e2e hook: anchored tab survives alarm", async ({ context, extensionId, serviceWorker }) => {
     const optionsPage = await openOptionsPage(context, extensionId);
     const tabId = await serviceWorker.evaluate(async () => {
         const tab = await chrome.tabs.create({
@@ -343,9 +295,7 @@ test("timeout change clears and recreates close-tab alarms", async ({
         });
     });
 
-    await expect
-        .poll(async () => countCloseAlarms(serviceWorker))
-        .toBeGreaterThan(0);
+    await expect.poll(async () => countCloseAlarms(serviceWorker)).toBeGreaterThan(0);
 
     const before = await countCloseAlarms(serviceWorker);
 

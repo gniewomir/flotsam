@@ -45,10 +45,7 @@ export async function cancelTabAlarm(tabId: number | undefined): Promise<void> {
     }
 }
 
-export async function rescheduleAll(
-    timeoutMinutes: number,
-    anchoredTabs: Set<number>,
-) {
+export async function rescheduleAll(timeoutMinutes: number, anchoredTabs: Set<number>) {
     await chrome.alarms.clearAll();
     await Promise.allSettled(
         (await chrome.tabs.query({})).map((tab) => {
@@ -98,46 +95,26 @@ chrome.alarms.onAlarm.addListener((alarm) => {
         if (tabDomain === null) return {};
 
         for (const excludedDomain of state.excludedDomains.values()) {
-            if (
-                tabDomain === excludedDomain ||
-                tabDomain.endsWith(`.${excludedDomain}`)
-            )
-                return {};
+            if (tabDomain === excludedDomain || tabDomain.endsWith(`.${excludedDomain}`)) return {};
         }
 
         if (tab.pinned) {
-            await scheduleTabAlarm(
-                tabId,
-                state.timeoutMinutes,
-                state.anchoredTabs,
-            );
+            await scheduleTabAlarm(tabId, state.timeoutMinutes, state.anchoredTabs);
             return {};
         }
 
         if (tab.groupId !== TAB_GROUP_ID_NONE) {
-            await scheduleTabAlarm(
-                tabId,
-                state.timeoutMinutes,
-                state.anchoredTabs,
-            );
+            await scheduleTabAlarm(tabId, state.timeoutMinutes, state.anchoredTabs);
             return {};
         }
 
         if (tab.active === true) {
-            await scheduleTabAlarm(
-                tabId,
-                state.timeoutMinutes,
-                state.anchoredTabs,
-            );
+            await scheduleTabAlarm(tabId, state.timeoutMinutes, state.anchoredTabs);
             return {};
         }
 
         if (tab.audible === true) {
-            await scheduleTabAlarm(
-                tabId,
-                state.timeoutMinutes,
-                state.anchoredTabs,
-            );
+            await scheduleTabAlarm(tabId, state.timeoutMinutes, state.anchoredTabs);
             return {};
         }
 
@@ -149,11 +126,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 
 chrome.tabs.onCreated.addListener((tab) => {
     queueStateful("chrome.tabs.onCreated - alarms", async (state) => {
-        await scheduleTabAlarm(
-            tab.id,
-            state.timeoutMinutes,
-            state.anchoredTabs,
-        );
+        await scheduleTabAlarm(tab.id, state.timeoutMinutes, state.anchoredTabs);
         return {};
     });
 });
@@ -161,32 +134,16 @@ chrome.tabs.onCreated.addListener((tab) => {
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
     queueStateful("chrome.tabs.onUpdated - alarms", async (state) => {
         if (changeInfo.url) {
-            await scheduleTabAlarm(
-                tabId,
-                state.timeoutMinutes,
-                state.anchoredTabs,
-            );
+            await scheduleTabAlarm(tabId, state.timeoutMinutes, state.anchoredTabs);
         }
         if (changeInfo.pinned === false) {
-            await scheduleTabAlarm(
-                tabId,
-                state.timeoutMinutes,
-                state.anchoredTabs,
-            );
+            await scheduleTabAlarm(tabId, state.timeoutMinutes, state.anchoredTabs);
         }
         if (changeInfo.groupId === TAB_GROUP_ID_NONE) {
-            await scheduleTabAlarm(
-                tabId,
-                state.timeoutMinutes,
-                state.anchoredTabs,
-            );
+            await scheduleTabAlarm(tabId, state.timeoutMinutes, state.anchoredTabs);
         }
         if (changeInfo.audible === false) {
-            await scheduleTabAlarm(
-                tabId,
-                state.timeoutMinutes,
-                state.anchoredTabs,
-            );
+            await scheduleTabAlarm(tabId, state.timeoutMinutes, state.anchoredTabs);
         }
         return {};
     });
@@ -202,11 +159,7 @@ chrome.tabs.onReplaced.addListener((addedTabId, removedTabId) => {
         // reschedule replaced tab ( preloading, pre-rendering)
         await Promise.allSettled([
             cancelTabAlarm(removedTabId),
-            scheduleTabAlarm(
-                addedTabId,
-                state.timeoutMinutes,
-                state.anchoredTabs,
-            ),
+            scheduleTabAlarm(addedTabId, state.timeoutMinutes, state.anchoredTabs),
         ]);
 
         return {
@@ -220,16 +173,8 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
         const previousTabId = state.activeTabByWindow.get(activeInfo.windowId);
         state.activeTabByWindow.set(activeInfo.windowId, activeInfo.tabId);
         await Promise.allSettled([
-            scheduleTabAlarm(
-                activeInfo.tabId,
-                state.timeoutMinutes,
-                state.anchoredTabs,
-            ),
-            scheduleTabAlarm(
-                previousTabId,
-                state.timeoutMinutes,
-                state.anchoredTabs,
-            ),
+            scheduleTabAlarm(activeInfo.tabId, state.timeoutMinutes, state.anchoredTabs),
+            scheduleTabAlarm(previousTabId, state.timeoutMinutes, state.anchoredTabs),
         ]);
         return {
             activeTabByWindow: state.activeTabByWindow,

@@ -91,10 +91,7 @@ export const test = base.extend<ExtensionFixture>({
     },
 });
 
-export async function openOptionsPage(
-    context: BrowserContext,
-    extensionId: string,
-): Promise<Page> {
+export async function openOptionsPage(context: BrowserContext, extensionId: string): Promise<Page> {
     const page = await context.newPage();
     await page.goto(`chrome-extension://${extensionId}/options/options.html`, {
         waitUntil: "domcontentloaded",
@@ -119,10 +116,7 @@ export async function triggerCloseAlarm(
     );
 }
 
-export async function tabExists(
-    serviceWorker: Worker,
-    tabId: number,
-): Promise<boolean> {
+export async function tabExists(serviceWorker: Worker, tabId: number): Promise<boolean> {
     return serviceWorker.evaluate(
         async ({ id }) => {
             try {
@@ -136,10 +130,7 @@ export async function tabExists(
     );
 }
 
-export async function syncStorageGet(
-    page: Page,
-    key: string,
-): Promise<unknown> {
+export async function syncStorageGet(page: Page, key: string): Promise<unknown> {
     return page.evaluate(async (storageKey) => {
         const values = await chrome.storage.sync.get([storageKey]);
         return values[storageKey];
@@ -158,10 +149,7 @@ export async function getCloseAlarmForTab(
     );
 }
 
-export async function setActiveTab(
-    serviceWorker: Worker,
-    tabId: number,
-): Promise<void> {
+export async function setActiveTab(serviceWorker: Worker, tabId: number): Promise<void> {
     await serviceWorker.evaluate(
         async ({ id }) => {
             await chrome.tabs.update(id, { active: true });
@@ -188,10 +176,7 @@ export async function setPinned(
  * (e.g. options). Calling `sendMessage` from Playwright’s service-worker handle does
  * not reliably reach `onMessage` listeners in the extension.
  */
-export async function e2eToggleAnchor(
-    extensionPage: Page,
-    tabId: number,
-): Promise<void> {
+export async function e2eToggleAnchor(extensionPage: Page, tabId: number): Promise<void> {
     await extensionPage.evaluate(async (id) => {
         const response = await chrome.runtime.sendMessage({
             type: "e2e-toggle-anchor",
@@ -208,10 +193,7 @@ export async function e2eToggleAnchor(
     }, tabId);
 }
 
-export async function e2eExcludeDomainForTab(
-    extensionPage: Page,
-    tabId: number,
-): Promise<void> {
+export async function e2eExcludeDomainForTab(extensionPage: Page, tabId: number): Promise<void> {
     await extensionPage.evaluate(async (id) => {
         const response = await chrome.runtime.sendMessage({
             type: "e2e-exclude-domain",

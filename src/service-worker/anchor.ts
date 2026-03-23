@@ -28,19 +28,13 @@ export async function toggleAnchorForManagedTab(
     }
     const isAnchored = state.anchoredTabs.has(tabId);
     const variant = isAnchored ? "anchored" : "floating";
-    const title = isAnchored
-        ? "Flotsam (anchored)"
-        : "Flotsam (will auto-close)";
+    const title = isAnchored ? "Flotsam (anchored)" : "Flotsam (will auto-close)";
 
     try {
         await Promise.all([
             isAnchored
                 ? cancelTabAlarm(tabId)
-                : scheduleTabAlarm(
-                      tabId,
-                      state.timeoutMinutes,
-                      state.anchoredTabs,
-                  ),
+                : scheduleTabAlarm(tabId, state.timeoutMinutes, state.anchoredTabs),
             chrome.action.setIcon({
                 tabId,
                 path: {
@@ -63,7 +57,5 @@ export async function toggleAnchorForManagedTab(
 }
 
 chrome.action.onClicked.addListener((tab) => {
-    queueStateful("chrome.action.onClicked", (state) =>
-        toggleAnchorForManagedTab(state, tab),
-    );
+    queueStateful("chrome.action.onClicked", (state) => toggleAnchorForManagedTab(state, tab));
 });

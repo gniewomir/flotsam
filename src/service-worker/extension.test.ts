@@ -17,9 +17,7 @@ function minimalState(): State {
 
 describe("context menu copy", () => {
     it("matches options page wording", () => {
-        expect(EXCLUDE_DOMAIN_CONTEXT_MENU_TITLE_MANAGED).toBe(
-            "Exclude tab domain",
-        );
+        expect(EXCLUDE_DOMAIN_CONTEXT_MENU_TITLE_MANAGED).toBe("Exclude tab domain");
     });
 });
 

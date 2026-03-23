@@ -25,9 +25,7 @@ const dirty = execSync("git status --porcelain", {
     encoding: "utf-8",
 }).trim();
 if (dirty) {
-    console.error(
-        "Working tree is not clean. Commit or stash changes before releasing.",
-    );
+    console.error("Working tree is not clean. Commit or stash changes before releasing.");
     process.exit(1);
 }
 

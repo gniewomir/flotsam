@@ -32,9 +32,7 @@ export async function updateConfiguration(
         excludedDomainsKey in configurationChanges &&
         configurationChanges[excludedDomainsKey] !== undefined
     ) {
-        update[excludedDomainsKey] = Array.from(
-            configurationChanges[excludedDomainsKey],
-        );
+        update[excludedDomainsKey] = Array.from(configurationChanges[excludedDomainsKey]);
     }
 
     if (Object.keys(update).length === 0) {

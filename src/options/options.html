@@ -12,8 +12,8 @@
             body {
                 margin: 0 auto;
                 font-family:
-                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                    Helvetica, Arial, sans-serif;
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+                    sans-serif;
                 line-height: 1.5;
                 padding: 24px;
                 max-width: 1200px;
@@ -25,10 +25,7 @@
 
             .layout {
                 display: grid;
-                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(
-                        0,
-                        1fr
-                    );
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
                 gap: 24px;
                 align-items: start;
             }
@@ -46,8 +43,7 @@
             }
 
             .card {
-                border: 1px solid
-                    color-mix(in srgb, currentColor 18%, transparent);
+                border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
                 border-radius: 10px;
                 padding: 16px;
                 margin-top: 16px;
@@ -77,8 +73,7 @@
             input[type="number"] {
                 font-size: 1rem;
                 padding: 6px 8px;
-                border: 1px solid
-                    color-mix(in srgb, currentColor 30%, transparent);
+                border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
                 border-radius: 6px;
                 background: transparent;
                 color: inherit;
@@ -96,8 +91,7 @@
                 align-items: center;
                 justify-content: space-between;
                 padding: 6px 0;
-                border-bottom: 1px solid
-                    color-mix(in srgb, currentColor 8%, transparent);
+                border-bottom: 1px solid color-mix(in srgb, currentColor 8%, transparent);
             }
 
             .domain-list li:last-child {
@@ -106,8 +100,7 @@
 
             .remove-btn {
                 background: none;
-                border: 1px solid
-                    color-mix(in srgb, currentColor 25%, transparent);
+                border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
                 border-radius: 6px;
                 color: inherit;
                 cursor: pointer;
@@ -121,8 +114,7 @@
             }
 
             .remove-btn:focus-visible {
-                outline: 2px solid
-                    color-mix(in srgb, currentColor 50%, transparent);
+                outline: 2px solid color-mix(in srgb, currentColor 50%, transparent);
                 outline-offset: 2px;
                 opacity: 1;
             }
@@ -143,8 +135,7 @@
                 flex: 1;
                 font-size: 1rem;
                 padding: 6px 8px;
-                border: 1px solid
-                    color-mix(in srgb, currentColor 30%, transparent);
+                border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
                 border-radius: 6px;
                 background: transparent;
                 color: inherit;
@@ -153,8 +144,7 @@
             .add-btn {
                 font-size: 0.9rem;
                 padding: 6px 14px;
-                border: 1px solid
-                    color-mix(in srgb, currentColor 25%, transparent);
+                border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
                 border-radius: 6px;
                 background: transparent;
                 color: inherit;
@@ -166,8 +156,7 @@
             }
 
             .add-btn:focus-visible {
-                outline: 2px solid
-                    color-mix(in srgb, currentColor 50%, transparent);
+                outline: 2px solid color-mix(in srgb, currentColor 50%, transparent);
                 outline-offset: 2px;
             }
 
@@ -208,26 +197,15 @@
     </head>
     <body>
         <div class="layout">
-            <aside
-                class="options-column"
-                id="settings"
-                aria-labelledby="settings-heading"
-            >
+            <aside class="options-column" id="settings" aria-labelledby="settings-heading">
                 <h2 class="column-heading" id="settings-heading">Options</h2>
 
                 <div class="card">
                     <h2>Auto-close timeout</h2>
                     <label for="timeout"
-                        >Close tabs after (minutes) &mdash; resets all
-                        timers</label
+                        >Close tabs after (minutes) &mdash; resets all timers</label
                     >
-                    <input
-                        type="number"
-                        id="timeout"
-                        min="1"
-                        max="1440"
-                        step="1"
-                    />
+                    <input type="number" id="timeout" min="1" max="1440" step="1" />
                     <div class="status" id="timeout-status"></div>
                 </div>
 
@@ -237,56 +215,42 @@
                     <ul class="domain-list" id="domain-list"></ul>
                     <label for="new-domain">Domain to exclude</label>
                     <div class="add-row">
-                        <input
-                            type="text"
-                            id="new-domain"
-                            placeholder="example.com"
-                        />
+                        <input type="text" id="new-domain" placeholder="example.com" />
                         <button class="add-btn" id="add-domain-btn">Add</button>
                     </div>
                 </div>
             </aside>
 
-            <section
-                class="about-column"
-                id="about"
-                aria-labelledby="about-heading"
-            >
+            <section class="about-column" id="about" aria-labelledby="about-heading">
                 <h2 class="column-heading" id="about-heading">About</h2>
                 <div class="card">
                     <h2>How it works</h2>
                     <p>
-                        Tabs accumulate. What starts as a quick lookup turns
-                        into dozens of stale pages silently consuming memory and
-                        attention. Flotsam flips the default: tabs are temporary
-                        unless you decide otherwise. The ones you care about get
+                        Tabs accumulate. What starts as a quick lookup turns into dozens of stale
+                        pages silently consuming memory and attention. Flotsam flips the default:
+                        tabs are temporary unless you decide otherwise. The ones you care about get
                         anchored; the rest drift away on their own.
                     </p>
                     <p>
-                        After you install, each tab on a domain Flotsam manages
-                        (ordinary
-                        <strong>HTTP</strong> and
-                        <strong>HTTPS</strong> addresses) gets a countdown. When
-                        the countdown finishes, that tab closes automatically.
+                        After you install, each tab on a domain Flotsam manages (ordinary
+                        <strong>HTTP</strong> and <strong>HTTPS</strong> addresses) gets a
+                        countdown. When the countdown finishes, that tab closes automatically.
                     </p>
                     <p>
-                        Click the <strong>toolbar icon</strong> to
-                        <strong>anchor</strong> the current tab so it stays open
-                        until you unanchor it. Click again to
-                        <strong>unanchor</strong>; the countdown applies again
-                        from there.
+                        Click the <strong>toolbar icon</strong> to <strong>anchor</strong> the
+                        current tab so it stays open until you unanchor it. Click again to
+                        <strong>unanchor</strong>; the countdown applies again from there.
                     </p>
                     <p>
-                        The tab you are looking at won't be closed. When you
-                        switch to another one it will start a new countdown.
+                        The tab you are looking at won't be closed. When you switch to another one
+                        it will start a new countdown.
                     </p>
                     <p>
-                        You can <strong>exclude entire domains</strong> so their
-                        tabs are never auto-closed. Add or remove exclusions
-                        here or right-click the extension icon and choose
-                        "Exclude tab domain". An exclusion for
-                        <strong>example.com</strong> also covers subdomains such
-                        as <strong>www.example.com</strong>.
+                        You can <strong>exclude entire domains</strong> so their tabs are never
+                        auto-closed. Add or remove exclusions here or right-click the extension icon
+                        and choose "Exclude tab domain". An exclusion for
+                        <strong>example.com</strong> also covers subdomains such as
+                        <strong>www.example.com</strong>.
                     </p>
                     <p>Flotsam does <strong>not</strong> auto-close:</p>
                     <ul class="behavior-list">
@@ -297,16 +261,15 @@
                         <li>tabs on <strong>excluded</strong> domains;</li>
                         <li>
                             tabs the browser treats as
-                            <strong>audible</strong> (playing sound). Muted tabs
-                            and silent playback are not treated as audible.
+                            <strong>audible</strong> (playing sound). Muted tabs and silent playback
+                            are not treated as audible.
                         </li>
                         <li>
                             tabs
                             <strong>outside normal web domains</strong>
                             (anything that isn’t a standard
-                            <strong>HTTP</strong> or <strong>HTTPS</strong> tab)
-                            — for example built-in browser pages, settings, or
-                            local files opened in the browser.
+                            <strong>HTTP</strong> or <strong>HTTPS</strong> tab) — for example
+                            built-in browser pages, settings, or local files opened in the browser.
                         </li>
                     </ul>
                 </div>
@@ -343,10 +306,7 @@
                         to support my non-commercial work.
                     </p>
                     <p>
-                        <a
-                            href="https://gniewomir.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <a href="https://gniewomir.com" target="_blank" rel="noopener noreferrer"
                             >Visit my blog</a
                         >
                         to get a piece of my mind.

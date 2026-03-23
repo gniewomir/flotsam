@@ -4,29 +4,13 @@ import { queue } from "./queue";
 
 const MAX_TIMEOUT_MINUTES = 1440;
 
-const timeoutInput = document.getElementById(
-    "timeout",
-) as HTMLInputElement | null;
-const timeoutStatus = document.getElementById(
-    "timeout-status",
-) as HTMLDivElement | null;
-const domainListEl = document.getElementById(
-    "domain-list",
-) as HTMLUListElement | null;
-const newDomainInput = document.getElementById(
-    "new-domain",
-) as HTMLInputElement | null;
-const addDomainBtn = document.getElementById(
-    "add-domain-btn",
-) as HTMLButtonElement | null;
+const timeoutInput = document.getElementById("timeout") as HTMLInputElement | null;
+const timeoutStatus = document.getElementById("timeout-status") as HTMLDivElement | null;
+const domainListEl = document.getElementById("domain-list") as HTMLUListElement | null;
+const newDomainInput = document.getElementById("new-domain") as HTMLInputElement | null;
+const addDomainBtn = document.getElementById("add-domain-btn") as HTMLButtonElement | null;
 
-if (
-    !timeoutInput ||
-    !timeoutStatus ||
-    !domainListEl ||
-    !newDomainInput ||
-    !addDomainBtn
-) {
+if (!timeoutInput || !timeoutStatus || !domainListEl || !newDomainInput || !addDomainBtn) {
     throw new Error("Required DOM elements not found — check options.html IDs");
 }
 
@@ -108,9 +92,7 @@ async function addDomain(): Promise<void> {
 
     const domain = normalizeDomain(raw);
     if (!domain) {
-        newDomainInput!.setCustomValidity(
-            "Enter a valid domain like example.com",
-        );
+        newDomainInput!.setCustomValidity("Enter a valid domain like example.com");
         newDomainInput!.reportValidity();
         return;
     }
@@ -169,16 +151,9 @@ async function persistTimeoutIfValid(): Promise<void> {
     const raw = timeoutInput!.value.trim();
     const value = Number(raw);
 
-    if (
-        !raw ||
-        !Number.isInteger(value) ||
-        value < 1 ||
-        value > MAX_TIMEOUT_MINUTES
-    ) {
+    if (!raw || !Number.isInteger(value) || value < 1 || value > MAX_TIMEOUT_MINUTES) {
         if (timeoutInput!.value !== "") {
-            await showStatus(
-                `Enter a value between 1 and ${MAX_TIMEOUT_MINUTES}.`,
-            );
+            await showStatus(`Enter a value between 1 and ${MAX_TIMEOUT_MINUTES}.`);
         }
         return;
     }
@@ -229,9 +204,7 @@ chrome.storage.sync.onChanged.addListener((changes) => {
                 renderDomainList();
                 timeoutInput!.value = String(config.timeoutMinutes);
             })
-            .catch((err) =>
-                logError("Failed to refresh settings from storage", err),
-            ),
+            .catch((err) => logError("Failed to refresh settings from storage", err)),
     );
 });
 
