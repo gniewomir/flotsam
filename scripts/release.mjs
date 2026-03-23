@@ -9,16 +9,18 @@ const ROOT = join(__dirname, "..");
 const version = process.argv[2];
 if (!version) {
   console.error("Usage: node scripts/release.mjs <version>");
-  console.error("Example: node scripts/release.mjs 0.4.0");
+  console.error("Example: node scripts/release.mjs v0.4.0");
   process.exit(1);
 }
 
-if (!/^\d+\.\d+\.\d+$/.test(version)) {
+if (!/^v\d+\.\d+\.\d+$/.test(version)) {
   console.error(
-    `Invalid version format: "${version}". Expected semver like 1.2.3`,
+    `Invalid version format: "${version}". Expected semver with v prefix, e.g. v1.2.3`,
   );
   process.exit(1);
 }
+
+const semver = version.slice(1);
 
 function updateJsonFile(filePath, updater) {
   const raw = readFileSync(filePath, "utf-8");
@@ -29,14 +31,14 @@ function updateJsonFile(filePath, updater) {
 
 const pkgPath = join(ROOT, "package.json");
 updateJsonFile(pkgPath, (pkg) => {
-  console.log(`package.json: ${pkg.version} -> ${version}`);
-  pkg.version = version;
+  console.log(`package.json: ${pkg.version} -> ${semver}`);
+  pkg.version = semver;
 });
 
 const manifestPath = join(ROOT, "src", "manifest.json");
 updateJsonFile(manifestPath, (manifest) => {
-  console.log(`src/manifest.json: ${manifest.version} -> ${version}`);
-  manifest.version = version;
+  console.log(`src/manifest.json: ${manifest.version} -> ${semver}`);
+  manifest.version = semver;
 });
 
 console.log("\nRunning npm install to sync package-lock.json...");
@@ -45,7 +47,7 @@ execSync("npm install --package-lock-only", { cwd: ROOT, stdio: "inherit" });
 console.log("\nBuilding extension...");
 execSync("npm run build", { cwd: ROOT, stdio: "inherit" });
 
-const zipName = `flotsam-v${version}.zip`;
+const zipName = `flotsam-${version}.zip`;
 execSync(`rm -f "${zipName}"`, { cwd: ROOT });
 execSync(`cd dist && zip -r "../${zipName}" .`, {
   cwd: ROOT,
@@ -55,7 +57,7 @@ execSync(`cd dist && zip -r "../${zipName}" .`, {
 console.log("\nFixing formatting...");
 execSync("npm run format", { cwd: ROOT, stdio: "inherit" });
 
-const tag = `v${version}`;
+const tag = version;
 console.log(`\nCommitting version bump and tagging as ${tag}...`);
 execSync("git add package.json package-lock.json src/manifest.json", {
   cwd: ROOT,
