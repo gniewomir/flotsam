@@ -3,7 +3,7 @@
   "name": "Flotsam",
   "short_name": "Flotsam",
   "description": "Auto-close tabs after a set time unless explicitly anchored.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "permissions": ["tabs", "alarms", "storage", "contextMenus"],
   "background": {
     "service_worker": "service-worker/background.js"
