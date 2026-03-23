@@ -7,31 +7,31 @@ import { excludeDomain } from "./extension";
 import { EXCLUDE_DOMAIN_CONTEXT_MENU_TITLE_MANAGED } from "./extension";
 
 function minimalState(): State {
-  return {
-    ...defaultConfiguration,
-    ...defaultSession,
-    activeTabByWindow: new Map(),
-    excludedDomains: new Set<string>(),
-  };
+    return {
+        ...defaultConfiguration,
+        ...defaultSession,
+        activeTabByWindow: new Map(),
+        excludedDomains: new Set<string>(),
+    };
 }
 
 describe("context menu copy", () => {
-  it("matches options page wording", () => {
-    expect(EXCLUDE_DOMAIN_CONTEXT_MENU_TITLE_MANAGED).toBe(
-      "Exclude tab domain",
-    );
-  });
+    it("matches options page wording", () => {
+        expect(EXCLUDE_DOMAIN_CONTEXT_MENU_TITLE_MANAGED).toBe(
+            "Exclude tab domain",
+        );
+    });
 });
 
 describe("excludeDomainFromManagedUrl", () => {
-  it("adds hostname for https URLs", () => {
-    const state = minimalState();
-    const partial = excludeDomain(state, "https://example.com/p");
-    expect(partial.excludedDomains?.has("example.com")).toBe(true);
-  });
+    it("adds hostname for https URLs", () => {
+        const state = minimalState();
+        const partial = excludeDomain(state, "https://example.com/p");
+        expect(partial.excludedDomains?.has("example.com")).toBe(true);
+    });
 
-  it("returns empty for non-managed URLs", () => {
-    const state = minimalState();
-    expect(excludeDomain(state, "about:blank")).toEqual({});
-  });
+    it("returns empty for non-managed URLs", () => {
+        const state = minimalState();
+        expect(excludeDomain(state, "about:blank")).toEqual({});
+    });
 });

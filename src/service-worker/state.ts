@@ -1,9 +1,9 @@
 import { logError, logState } from "../log";
 import {
-  Configuration,
-  defaultConfiguration,
-  loadConfiguration,
-  updateConfiguration,
+    Configuration,
+    defaultConfiguration,
+    loadConfiguration,
+    updateConfiguration,
 } from "../configuration";
 import { defaultSession, loadSession, Session, updateSession } from "./session";
 
@@ -65,17 +65,17 @@ import { defaultSession, loadSession, Session, updateSession } from "./session";
  */
 
 type Transient = {
-  activeTabByWindow: Map<number, number>;
+    activeTabByWindow: Map<number, number>;
 };
 const defaultTransientState: Transient = {
-  activeTabByWindow: new Map<number, number>(),
+    activeTabByWindow: new Map<number, number>(),
 };
 
 export type State = Configuration & Session & Transient;
 let state: State = {
-  ...defaultConfiguration,
-  ...defaultSession,
-  ...defaultTransientState,
+    ...defaultConfiguration,
+    ...defaultSession,
+    ...defaultTransientState,
 };
 
 /**
@@ -84,19 +84,22 @@ let state: State = {
 let taskQueue: Promise<unknown> = Promise.resolve({});
 
 void queue("initial - state - configuration load", async () => {
-  state = structuredClone({ ...state, ...(await loadConfiguration()) });
+    state = structuredClone({ ...state, ...(await loadConfiguration()) });
 });
 void queue("initial - state - session load", async () => {
-  state = structuredClone({ ...state, ...(await loadSession()) });
+    state = structuredClone({ ...state, ...(await loadSession()) });
 });
 
 chrome.storage.sync.onChanged.addListener(() => {
-  queue(
-    "chrome.storage.sync.onChanged - state - reloaded configuration",
-    async () => {
-      state = structuredClone({ ...state, ...(await loadConfiguration()) });
-    },
-  );
+    queue(
+        "chrome.storage.sync.onChanged - state - reloaded configuration",
+        async () => {
+            state = structuredClone({
+                ...state,
+                ...(await loadConfiguration()),
+            });
+        },
+    );
 });
 
 /**
@@ -107,45 +110,45 @@ chrome.storage.sync.onChanged.addListener(() => {
  * @internal Exposed only for convenience of E2E tests
  */
 export function queueStatefulAsync(
-  initiator: string,
-  payload: (state: State) => Promise<Partial<State>>,
+    initiator: string,
+    payload: (state: State) => Promise<Partial<State>>,
 ): Promise<void> {
-  const promise = taskQueue.then(async () => {
-    let stateChanges: Partial<State>;
-    try {
-      stateChanges = await payload(structuredClone(state));
-    } catch (error) {
-      logError(
-        `Error while running payload for initiator "${initiator}"`,
-        error as Error,
-      );
-      stateChanges = {};
-    }
-    if (Object.keys(stateChanges).length === 0) {
-      return;
-    }
-    const previousState = state;
-    const nextState = { ...state, ...stateChanges };
-    state = nextState;
-    logState(
-      `State transition triggered by initiator "${initiator}"`,
-      previousState,
-      nextState,
-    );
-    try {
-      await Promise.all([
-        updateConfiguration(stateChanges),
-        updateSession(stateChanges),
-      ]);
-    } catch (error) {
-      logError(
-        `Error while running payload for initiator "${initiator}" - failed to update configuration or session`,
-        error as Error,
-      );
-    }
-  });
-  taskQueue = promise.catch(() => {});
-  return promise;
+    const promise = taskQueue.then(async () => {
+        let stateChanges: Partial<State>;
+        try {
+            stateChanges = await payload(structuredClone(state));
+        } catch (error) {
+            logError(
+                `Error while running payload for initiator "${initiator}"`,
+                error as Error,
+            );
+            stateChanges = {};
+        }
+        if (Object.keys(stateChanges).length === 0) {
+            return;
+        }
+        const previousState = state;
+        const nextState = { ...state, ...stateChanges };
+        state = nextState;
+        logState(
+            `State transition triggered by initiator "${initiator}"`,
+            previousState,
+            nextState,
+        );
+        try {
+            await Promise.all([
+                updateConfiguration(stateChanges),
+                updateSession(stateChanges),
+            ]);
+        } catch (error) {
+            logError(
+                `Error while running payload for initiator "${initiator}" - failed to update configuration or session`,
+                error as Error,
+            );
+        }
+    });
+    taskQueue = promise.catch(() => {});
+    return promise;
 }
 
 /**
@@ -155,10 +158,10 @@ export function queueStatefulAsync(
  * @param payload
  */
 export function queueStateful(
-  initiator: string,
-  payload: (state: State) => Promise<Partial<State>>,
+    initiator: string,
+    payload: (state: State) => Promise<Partial<State>>,
 ): void {
-  void queueStatefulAsync(initiator, payload);
+    void queueStatefulAsync(initiator, payload);
 }
 
 /**
@@ -167,13 +170,16 @@ export function queueStateful(
  * @param payload
  */
 export function queue(initiator: string, payload: () => Promise<void>): void {
-  taskQueue = taskQueue
-    .then(payload)
-    .then(() => {
-      return {};
-    })
-    .catch((error: Error) => {
-      logError(`Error while running payload for initiator ${initiator}`, error);
-      return {};
-    });
+    taskQueue = taskQueue
+        .then(payload)
+        .then(() => {
+            return {};
+        })
+        .catch((error: Error) => {
+            logError(
+                `Error while running payload for initiator ${initiator}`,
+                error,
+            );
+            return {};
+        });
 }

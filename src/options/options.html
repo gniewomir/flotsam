@@ -1,334 +1,366 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flotsam Settings</title>
-    <style>
-      :root {
-        color-scheme: light dark;
-      }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Flotsam Settings</title>
+        <style>
+            :root {
+                color-scheme: light dark;
+            }
 
-      body {
-        margin: 0 auto;
-        font-family:
-          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-          Arial, sans-serif;
-        line-height: 1.5;
-        padding: 24px;
-        max-width: 1200px;
-      }
+            body {
+                margin: 0 auto;
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    Helvetica, Arial, sans-serif;
+                line-height: 1.5;
+                padding: 24px;
+                max-width: 1200px;
+            }
 
-      h1 {
-        margin-top: 0;
-      }
+            h1 {
+                margin-top: 0;
+            }
 
-      .layout {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
-        gap: 24px;
-        align-items: start;
-      }
+            .layout {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(
+                        0,
+                        1fr
+                    );
+                gap: 24px;
+                align-items: start;
+            }
 
-      @media (max-width: 880px) {
-        .layout {
-          grid-template-columns: 1fr;
-        }
-      }
+            @media (max-width: 880px) {
+                .layout {
+                    grid-template-columns: 1fr;
+                }
+            }
 
-      .column-heading {
-        margin: 0 0 12px;
-        font-size: 1.35rem;
-        font-weight: 600;
-      }
+            .column-heading {
+                margin: 0 0 12px;
+                font-size: 1.35rem;
+                font-weight: 600;
+            }
 
-      .card {
-        border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
-        border-radius: 10px;
-        padding: 16px;
-        margin-top: 16px;
-      }
+            .card {
+                border: 1px solid
+                    color-mix(in srgb, currentColor 18%, transparent);
+                border-radius: 10px;
+                padding: 16px;
+                margin-top: 16px;
+            }
 
-      .options-column > .card:first-of-type,
-      .about-column > .card:first-of-type,
-      .support-column > .card:first-of-type {
-        margin-top: 0;
-      }
+            .options-column > .card:first-of-type,
+            .about-column > .card:first-of-type,
+            .support-column > .card:first-of-type {
+                margin-top: 0;
+            }
 
-      .card h2 {
-        margin-top: 0;
-        font-size: 1.2rem;
-      }
+            .card h2 {
+                margin-top: 0;
+                font-size: 1.2rem;
+            }
 
-      label {
-        display: block;
-        margin-bottom: 4px;
-        font-weight: 500;
-      }
+            label {
+                display: block;
+                margin-bottom: 4px;
+                font-weight: 500;
+            }
 
-      label[for="new-domain"] {
-        margin-top: 12px;
-      }
+            label[for="new-domain"] {
+                margin-top: 12px;
+            }
 
-      input[type="number"] {
-        font-size: 1rem;
-        padding: 6px 8px;
-        border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
-        border-radius: 6px;
-        background: transparent;
-        color: inherit;
-        width: 80px;
-      }
+            input[type="number"] {
+                font-size: 1rem;
+                padding: 6px 8px;
+                border: 1px solid
+                    color-mix(in srgb, currentColor 30%, transparent);
+                border-radius: 6px;
+                background: transparent;
+                color: inherit;
+                width: 80px;
+            }
 
-      .domain-list {
-        list-style: none;
-        padding: 0;
-        margin: 8px 0 0;
-      }
+            .domain-list {
+                list-style: none;
+                padding: 0;
+                margin: 8px 0 0;
+            }
 
-      .domain-list li {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 6px 0;
-        border-bottom: 1px solid
-          color-mix(in srgb, currentColor 8%, transparent);
-      }
+            .domain-list li {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 6px 0;
+                border-bottom: 1px solid
+                    color-mix(in srgb, currentColor 8%, transparent);
+            }
 
-      .domain-list li:last-child {
-        border-bottom: none;
-      }
+            .domain-list li:last-child {
+                border-bottom: none;
+            }
 
-      .remove-btn {
-        background: none;
-        border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
-        border-radius: 6px;
-        color: inherit;
-        cursor: pointer;
-        padding: 2px 10px;
-        font-size: 0.85rem;
-        opacity: 0.7;
-      }
+            .remove-btn {
+                background: none;
+                border: 1px solid
+                    color-mix(in srgb, currentColor 25%, transparent);
+                border-radius: 6px;
+                color: inherit;
+                cursor: pointer;
+                padding: 2px 10px;
+                font-size: 0.85rem;
+                opacity: 0.7;
+            }
 
-      .remove-btn:hover {
-        opacity: 1;
-      }
+            .remove-btn:hover {
+                opacity: 1;
+            }
 
-      .remove-btn:focus-visible {
-        outline: 2px solid color-mix(in srgb, currentColor 50%, transparent);
-        outline-offset: 2px;
-        opacity: 1;
-      }
+            .remove-btn:focus-visible {
+                outline: 2px solid
+                    color-mix(in srgb, currentColor 50%, transparent);
+                outline-offset: 2px;
+                opacity: 1;
+            }
 
-      .empty-state {
-        opacity: 0.5;
-        font-style: italic;
-        margin: 8px 0 0;
-      }
+            .empty-state {
+                opacity: 0.5;
+                font-style: italic;
+                margin: 8px 0 0;
+            }
 
-      .add-row {
-        display: flex;
-        gap: 8px;
-        margin-top: 8px;
-      }
+            .add-row {
+                display: flex;
+                gap: 8px;
+                margin-top: 8px;
+            }
 
-      .add-row input[type="text"] {
-        flex: 1;
-        font-size: 1rem;
-        padding: 6px 8px;
-        border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
-        border-radius: 6px;
-        background: transparent;
-        color: inherit;
-      }
+            .add-row input[type="text"] {
+                flex: 1;
+                font-size: 1rem;
+                padding: 6px 8px;
+                border: 1px solid
+                    color-mix(in srgb, currentColor 30%, transparent);
+                border-radius: 6px;
+                background: transparent;
+                color: inherit;
+            }
 
-      .add-btn {
-        font-size: 0.9rem;
-        padding: 6px 14px;
-        border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
-        border-radius: 6px;
-        background: transparent;
-        color: inherit;
-        cursor: pointer;
-      }
+            .add-btn {
+                font-size: 0.9rem;
+                padding: 6px 14px;
+                border: 1px solid
+                    color-mix(in srgb, currentColor 25%, transparent);
+                border-radius: 6px;
+                background: transparent;
+                color: inherit;
+                cursor: pointer;
+            }
 
-      .add-btn:hover {
-        background: color-mix(in srgb, currentColor 8%, transparent);
-      }
+            .add-btn:hover {
+                background: color-mix(in srgb, currentColor 8%, transparent);
+            }
 
-      .add-btn:focus-visible {
-        outline: 2px solid color-mix(in srgb, currentColor 50%, transparent);
-        outline-offset: 2px;
-      }
+            .add-btn:focus-visible {
+                outline: 2px solid
+                    color-mix(in srgb, currentColor 50%, transparent);
+                outline-offset: 2px;
+            }
 
-      .status {
-        font-size: 0.85rem;
-        margin-top: 6px;
-        min-height: 1.3em;
-        opacity: 0.7;
-      }
+            .status {
+                font-size: 0.85rem;
+                margin-top: 6px;
+                min-height: 1.3em;
+                opacity: 0.7;
+            }
 
-      code {
-        font-size: 0.95em;
-      }
+            code {
+                font-size: 0.95em;
+            }
 
-      .about-column ul:not(.domain-list):not(.behavior-list) {
-        list-style-type: none;
-        padding-left: 0;
-      }
+            .about-column ul:not(.domain-list):not(.behavior-list) {
+                list-style-type: none;
+                padding-left: 0;
+            }
 
-      .behavior-list {
-        list-style: disc;
-        padding-left: 1.25rem;
-        margin: 0.75rem 0 0;
-      }
+            .behavior-list {
+                list-style: disc;
+                padding-left: 1.25rem;
+                margin: 0.75rem 0 0;
+            }
 
-      .behavior-list li {
-        margin: 0.35em 0;
-      }
+            .behavior-list li {
+                margin: 0.35em 0;
+            }
 
-      .behavior-list li::marker {
-        color: color-mix(in srgb, currentColor 45%, transparent);
-      }
+            .behavior-list li::marker {
+                color: color-mix(in srgb, currentColor 45%, transparent);
+            }
 
-      .about-column a {
-        color: inherit;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="layout">
-      <aside
-        class="options-column"
-        id="settings"
-        aria-labelledby="settings-heading"
-      >
-        <h2 class="column-heading" id="settings-heading">Options</h2>
+            .about-column a {
+                color: inherit;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="layout">
+            <aside
+                class="options-column"
+                id="settings"
+                aria-labelledby="settings-heading"
+            >
+                <h2 class="column-heading" id="settings-heading">Options</h2>
 
-        <div class="card">
-          <h2>Auto-close timeout</h2>
-          <label for="timeout"
-            >Close tabs after (minutes) &mdash; resets all timers</label
-          >
-          <input type="number" id="timeout" min="1" max="1440" step="1" />
-          <div class="status" id="timeout-status"></div>
+                <div class="card">
+                    <h2>Auto-close timeout</h2>
+                    <label for="timeout"
+                        >Close tabs after (minutes) &mdash; resets all
+                        timers</label
+                    >
+                    <input
+                        type="number"
+                        id="timeout"
+                        min="1"
+                        max="1440"
+                        step="1"
+                    />
+                    <div class="status" id="timeout-status"></div>
+                </div>
+
+                <div class="card" id="excluded-domains">
+                    <h2>Excluded domains</h2>
+                    <p>Tabs on these domains will never be auto-closed.</p>
+                    <ul class="domain-list" id="domain-list"></ul>
+                    <label for="new-domain">Domain to exclude</label>
+                    <div class="add-row">
+                        <input
+                            type="text"
+                            id="new-domain"
+                            placeholder="example.com"
+                        />
+                        <button class="add-btn" id="add-domain-btn">Add</button>
+                    </div>
+                </div>
+            </aside>
+
+            <section
+                class="about-column"
+                id="about"
+                aria-labelledby="about-heading"
+            >
+                <h2 class="column-heading" id="about-heading">About</h2>
+                <div class="card">
+                    <h2>How it works</h2>
+                    <p>
+                        Tabs accumulate. What starts as a quick lookup turns
+                        into dozens of stale pages silently consuming memory and
+                        attention. Flotsam flips the default: tabs are temporary
+                        unless you decide otherwise. The ones you care about get
+                        anchored; the rest drift away on their own.
+                    </p>
+                    <p>
+                        After you install, each tab on a domain Flotsam manages
+                        (ordinary
+                        <strong>HTTP</strong> and
+                        <strong>HTTPS</strong> addresses) gets a countdown. When
+                        the countdown finishes, that tab closes automatically.
+                    </p>
+                    <p>
+                        Click the <strong>toolbar icon</strong> to
+                        <strong>anchor</strong> the current tab so it stays open
+                        until you unanchor it. Click again to
+                        <strong>unanchor</strong>; the countdown applies again
+                        from there.
+                    </p>
+                    <p>
+                        The tab you are looking at won't be closed. When you
+                        switch to another one it will start a new countdown.
+                    </p>
+                    <p>
+                        You can <strong>exclude entire domains</strong> so their
+                        tabs are never auto-closed. Add or remove exclusions
+                        here or right-click the extension icon and choose
+                        "Exclude tab domain". An exclusion for
+                        <strong>example.com</strong> also covers subdomains such
+                        as <strong>www.example.com</strong>.
+                    </p>
+                    <p>Flotsam does <strong>not</strong> auto-close:</p>
+                    <ul class="behavior-list">
+                        <li><strong>focused</strong> tab;</li>
+                        <li><strong>anchored</strong> tabs;</li>
+                        <li><strong>pinned</strong> tabs;</li>
+                        <li><strong>grouped</strong> tabs;</li>
+                        <li>tabs on <strong>excluded</strong> domains;</li>
+                        <li>
+                            tabs the browser treats as
+                            <strong>audible</strong> (playing sound). Muted tabs
+                            and silent playback are not treated as audible.
+                        </li>
+                        <li>
+                            tabs
+                            <strong>outside normal web domains</strong>
+                            (anything that isn’t a standard
+                            <strong>HTTP</strong> or <strong>HTTPS</strong> tab)
+                            — for example built-in browser pages, settings, or
+                            local files opened in the browser.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="support-column" id="support">
+                <h2 class="column-heading" id="support-heading">Support</h2>
+                <div class="card">
+                    <p>
+                        <a
+                            href="https://github.com/gniewomir/flotsam/issues"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Open an issue</a
+                        >
+                        to report a bug or make a feature request.
+                    </p>
+                    <p>
+                        <a
+                            href="https://github.com/gniewomir/flotsam/blob/main/CONTRIBUTING.md"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Read the contributing guide</a
+                        >
+                        if you want to help.
+                    </p>
+                    <p>
+                        <a
+                            href="https://ko-fi.com/I3I61GPLRC"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Buy Me a Coffee</a
+                        >
+                        to support my non-commercial work.
+                    </p>
+                    <p>
+                        <a
+                            href="https://gniewomir.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Visit my blog</a
+                        >
+                        to get a piece of my mind.
+                    </p>
+                    <p>
+                        <a href="mailto:gniewomir.swiechowski+flotsam@gmail.com"
+                            >Drop me an email</a
+                        >
+                        if you want to get in touch with me.
+                    </p>
+                </div>
+            </section>
         </div>
 
-        <div class="card" id="excluded-domains">
-          <h2>Excluded domains</h2>
-          <p>Tabs on these domains will never be auto-closed.</p>
-          <ul class="domain-list" id="domain-list"></ul>
-          <label for="new-domain">Domain to exclude</label>
-          <div class="add-row">
-            <input type="text" id="new-domain" placeholder="example.com" />
-            <button class="add-btn" id="add-domain-btn">Add</button>
-          </div>
-        </div>
-      </aside>
-
-      <section class="about-column" id="about" aria-labelledby="about-heading">
-        <h2 class="column-heading" id="about-heading">About</h2>
-        <div class="card">
-          <h2>How it works</h2>
-          <p>
-            Tabs accumulate. What starts as a quick lookup turns into dozens of
-            stale pages silently consuming memory and attention. Flotsam flips
-            the default: tabs are temporary unless you decide otherwise. The
-            ones you care about get anchored; the rest drift away on their own.
-          </p>
-          <p>
-            After you install, each tab on a domain Flotsam manages (ordinary
-            <strong>HTTP</strong> and <strong>HTTPS</strong> addresses) gets a
-            countdown. When the countdown finishes, that tab closes
-            automatically.
-          </p>
-          <p>
-            Click the <strong>toolbar icon</strong> to
-            <strong>anchor</strong> the current tab so it stays open until you
-            unanchor it. Click again to <strong>unanchor</strong>; the countdown
-            applies again from there.
-          </p>
-          <p>
-            The tab you are looking at won't be closed. When you switch to
-            another one it will start a new countdown.
-          </p>
-          <p>
-            You can <strong>exclude entire domains</strong> so their tabs are
-            never auto-closed. Add or remove exclusions here or right-click the
-            extension icon and choose "Exclude tab domain". An exclusion for
-            <strong>example.com</strong> also covers subdomains such as
-            <strong>www.example.com</strong>.
-          </p>
-          <p>Flotsam does <strong>not</strong> auto-close:</p>
-          <ul class="behavior-list">
-            <li><strong>focused</strong> tab;</li>
-            <li><strong>anchored</strong> tabs;</li>
-            <li><strong>pinned</strong> tabs;</li>
-            <li><strong>grouped</strong> tabs;</li>
-            <li>tabs on <strong>excluded</strong> domains;</li>
-            <li>
-              tabs the browser treats as <strong>audible</strong> (playing
-              sound). Muted tabs and silent playback are not treated as audible.
-            </li>
-            <li>
-              tabs <strong>outside normal web domains</strong> (anything that
-              isn’t a standard <strong>HTTP</strong> or
-              <strong>HTTPS</strong> tab) — for example built-in browser pages,
-              settings, or local files opened in the browser.
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="support-column" id="support">
-        <h2 class="column-heading" id="support-heading">Support</h2>
-        <div class="card">
-          <p>
-            <a
-              href="https://github.com/gniewomir/flotsam/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Open an issue</a
-            >
-            to report a bug or make a feature request.
-          </p>
-          <p>
-            <a
-              href="https://github.com/gniewomir/flotsam/blob/main/CONTRIBUTING.md"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Read the contributing guide</a
-            >
-            if you want to help.
-          </p>
-          <p>
-            <a
-              href="https://ko-fi.com/I3I61GPLRC"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Buy Me a Coffee</a
-            >
-            to support my non-commercial work.
-          </p>
-          <p>
-            <a
-              href="https://gniewomir.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Visit my blog</a
-            >
-            to get a piece of my mind.
-          </p>
-          <p>
-            <a href="mailto:gniewomir.swiechowski+flotsam@gmail.com"
-              >Drop me an email</a
-            >
-            if you want to get in touch with me.
-          </p>
-        </div>
-      </section>
-    </div>
-
-    <script src="options.js"></script>
-  </body>
+        <script src="options.js"></script>
+    </body>
 </html>

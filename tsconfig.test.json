@@ -1,8 +1,8 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "types": ["node", "chrome"],
-    "rootDir": "."
-  },
-  "include": ["test/**/*.ts"]
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "types": ["node", "chrome"],
+        "rootDir": "."
+    },
+    "include": ["test/**/*.ts"]
 }
