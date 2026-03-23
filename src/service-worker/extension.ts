@@ -1,12 +1,16 @@
 import { logError } from "../log";
-import { isManagedUrl } from "./utility";
 import { queue, queueStateful } from "./state";
-import { extractDomain } from "../utility";
 import { rescheduleAll } from "./alarm";
+import { excludeDomainFromManagedUrl } from "./extension-actions";
+import {
+  EXCLUDE_DOMAIN_CONTEXT_MENU_ID,
+  EXCLUDE_DOMAIN_CONTEXT_MENU_TITLE_MANAGED,
+} from "./extension-constants";
 
-export const EXCLUDE_DOMAIN_CONTEXT_MENU_ID = "flotsam-exclude-domain" as const;
-export const EXCLUDE_DOMAIN_CONTEXT_MENU_TITLE_MANAGED =
-  "Exclude tab domain" as const;
+export {
+  EXCLUDE_DOMAIN_CONTEXT_MENU_ID,
+  EXCLUDE_DOMAIN_CONTEXT_MENU_TITLE_MANAGED,
+} from "./extension-constants";
 
 async function registerContextmenu() {
   await chrome.contextMenus.removeAll();
@@ -62,16 +66,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     async (state) => {
       if (info.menuItemId !== EXCLUDE_DOMAIN_CONTEXT_MENU_ID) return {};
 
-      const url = tab?.url;
-      if (!isManagedUrl(url)) return {};
-      const domain = extractDomain(url);
-      if (!domain) return {};
-
-      state.excludedDomains.add(domain);
-
-      return {
-        excludedDomains: state.excludedDomains,
-      };
+      return excludeDomainFromManagedUrl(state, tab?.url);
     },
   );
   queue("chrome.contextMenus.onClicked", async () => {

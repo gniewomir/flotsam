@@ -16,6 +16,6 @@ execSync("cp src/options/options.html dist/options/", {
 });
 execSync("node scripts/generate-icons.mjs", { cwd: ROOT, stdio: "inherit" });
 execSync(
-  "esbuild src/service-worker/background.ts src/options/options.ts --bundle --outdir=dist --target=es2022 --platform=browser --format=iife --watch",
+  "esbuild src/service-worker/background.ts src/options/options.ts --bundle --outdir=dist --target=es2022 --platform=browser --format=iife --define:FLOTSAM_E2E=false --watch",
   { cwd: ROOT, stdio: "inherit" },
 );

@@ -3,14 +3,12 @@ import { queue, queueStateful } from "./state";
 import { isManagedUrl } from "./utility";
 import { extractDomain } from "../utility";
 import { Configuration } from "../configuration";
+import {
+  TAB_GROUP_ID_NONE,
+  tabAllowsCloseAlarmScheduling,
+} from "./tab-eligibility";
 
 export const ALARM_PREFIX = "close-tab-";
-
-/**
- * note: we do not want to ask for tabGroups permission just to get a const,
- *       used to substitute chrome.tabGroups.TAB_GROUP_ID_NONE
- */
-const TAB_GROUP_ID_NONE = -1;
 
 export function alarmName(tabId: number): string {
   return `${ALARM_PREFIX}${tabId}`;
@@ -28,10 +26,7 @@ export async function scheduleTabAlarm(
 
     const tab = await chrome.tabs.get(tabId);
 
-    if (tab.pinned === true) return;
-    if (tab.groupId !== TAB_GROUP_ID_NONE) return;
-    if (tab.audible === true) return;
-    if (!isManagedUrl(tab.url)) return;
+    if (!tabAllowsCloseAlarmScheduling(tab)) return;
 
     await chrome.alarms.create(alarmName(tabId), {
       delayInMinutes: timeoutMinutes,
