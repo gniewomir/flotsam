@@ -6,6 +6,9 @@
         "node": ">=22.20.0"
     },
     "scripts": {
+        "prepare": "node scripts/install-git-hooks.mjs",
+        "pre-commit": "node scripts/pre-commit.mjs",
+        "pre-push": "node scripts/pre-push.mjs",
         "build": "node scripts/build.mjs",
         "build:e2e": "FLOTSAM_E2E=1 node scripts/build.mjs",
         "typecheck": "tsc -p . --noEmit && tsc -p tsconfig.test.json --noEmit",
