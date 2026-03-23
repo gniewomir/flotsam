@@ -74,8 +74,6 @@ updateJsonFile(manifestPath, (manifest) => {
 console.log("\nRunning npm install to sync package-lock.json...");
 execSync("npm install --package-lock-only", { cwd: ROOT, stdio: "inherit" });
 
-
-
 console.log("\nBuilding extension...");
 execSync("npm run build", { cwd: ROOT, stdio: "inherit" });
 
