@@ -18,6 +18,7 @@ Produce all of the following:
 5. A test plan.
 6. A new feature branch for the task.
 7. A GitHub issue containing the plan and test plan.
+8. A pull request linked to the created GitHub issue.
 
 ## Non-negotiable rules
 
@@ -26,6 +27,7 @@ Produce all of the following:
 - Do not start coding while in planning flow.
 - Confirm option choice explicitly before finalizing the plan.
 - Use concise, actionable steps.
+- Ensure the pull request is linked to the created GitHub issue.
 
 ## Workflow
 
@@ -105,7 +107,9 @@ Branch naming guidance:
 
 If the user has a branch naming convention, follow it.
 
-### 7) Create GitHub issue and post plan
+### 7) Create or update GitHub issue via GitHub CLI
+
+Issue creation and updates must use GitHub CLI (`gh`) commands only. Do not use the GitHub web UI or other tools for this step.
 
 Create an issue with `gh` and include both implementation and test plans:
 
@@ -132,11 +136,15 @@ EOF
 )"
 ```
 
-If the issue already exists, update it:
+If the issue already exists, update it with `gh`:
 
 ```bash
 gh issue edit <issue-number> --body-file <path-to-prepared-body.md>
 ```
+
+### 8) Ensure the pull request is linked to the issue
+
+When creating the pull request, include an issue-closing reference in the PR body (for example: `Closes #<issue-number>`) so the PR is explicitly linked to the created issue.
 
 ## Response format to user
 
@@ -148,6 +156,7 @@ Use this structure:
 4. **Implementation plan** (checklist).
 5. **Test plan** (checklist).
 6. **Branch + issue status** (branch name, issue number/link).
+7. **PR status** (PR link and explicit issue link reference, for example `Closes #123`).
 
 ## Completion checklist
 
@@ -157,3 +166,4 @@ Use this structure:
 - [ ] Test plan prepared.
 - [ ] New feature branch created and checked out.
 - [ ] GitHub issue created or updated with both plans.
+- [ ] Pull request is linked to the created issue.
