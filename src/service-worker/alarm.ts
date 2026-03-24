@@ -29,7 +29,7 @@ export async function scheduleTabAlarm(
         });
         logDebug("Scheduled alarm", { tabId, timeoutMinutes });
     } catch (error) {
-        logError("Failed to schedule alarm", error);
+        logDebug("Failed to schedule alarm", error);
     }
 }
 
