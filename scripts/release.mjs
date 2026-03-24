@@ -63,6 +63,12 @@ updateJsonFile(manifestPath, (manifest) => {
     manifest.version = semver;
 });
 
+console.log("\nFormating files...");
+execSync("npm run prettier -- -write package.json package-lock.json src/manifest.json", {
+    cwd: ROOT,
+    stdio: "inherit",
+});
+
 console.log("\nRunning npm install to sync package-lock.json...");
 execSync("npm install --package-lock-only", { cwd: ROOT, stdio: "inherit" });
 
@@ -75,6 +81,7 @@ execSync("git add package.json package-lock.json src/manifest.json", {
     cwd: ROOT,
     stdio: "inherit",
 });
+execSync("npm run format", { cwd: ROOT, stdio: "inherit" });
 execSync(`git commit -m "release flotsam ${tag}"`, {
     cwd: ROOT,
     stdio: "inherit",

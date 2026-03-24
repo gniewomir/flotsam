@@ -21,6 +21,7 @@
         "store:screenshots": "node scripts/generate-store-assets.mjs",
         "store:promo": "node scripts/generate-promo.mjs",
         "store:all": "npm run store:screenshots",
+        "prettier": "prettier",
         "format": "prettier --write .",
         "format:check": "prettier --check ."
     },
