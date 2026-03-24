@@ -8,29 +8,15 @@
             /* Values align with branding/store/palette.json (Chrome Web Store & promo palette). */
             :root {
                 color-scheme: light dark;
-                --flotsam-canvas: #e8eef5;
-                --flotsam-gradient-top: #dde8f2;
-                --flotsam-gradient-bottom: #8fa9c4;
-                --flotsam-heading: #1a2b3c;
-                --flotsam-title-strong: #0d2840;
-                --flotsam-body: #333344;
-                --flotsam-muted: #6b7b8c;
-                --flotsam-link: #1a5a8a;
-                --flotsam-card-surface: color-mix(in srgb, #ffffff 88%, var(--flotsam-canvas));
-            }
-
-            @media (prefers-color-scheme: dark) {
-                :root {
-                    --flotsam-canvas: #0d2840;
-                    --flotsam-gradient-top: #1a2b3c;
-                    --flotsam-gradient-bottom: #0d2840;
-                    --flotsam-heading: #e8eef5;
-                    --flotsam-title-strong: #dde8f2;
-                    --flotsam-body: #c8d6e8;
-                    --flotsam-muted: #8fa9c4;
-                    --flotsam-link: #9ec5e8;
-                    --flotsam-card-surface: color-mix(in srgb, #ffffff 8%, var(--flotsam-canvas));
-                }
+                --flotsam-canvas: #0d2840;
+                --flotsam-gradient-top: #1a2b3c;
+                --flotsam-gradient-bottom: #0d2840;
+                --flotsam-heading: #e8eef5;
+                --flotsam-title-strong: #dde8f2;
+                --flotsam-body: #c8d6e8;
+                --flotsam-muted: #8fa9c4;
+                --flotsam-link: #9ec5e8;
+                --flotsam-card-surface: color-mix(in srgb, #ffffff 8%, var(--flotsam-canvas));
             }
 
             body {
@@ -50,6 +36,24 @@
                     var(--flotsam-canvas) 42%,
                     var(--flotsam-gradient-bottom) 100%
                 );
+                position: relative;
+            }
+
+            /* branding/icons/anchor.svg (copied to dist/options/anchor.svg at build time) */
+            body::after {
+                content: "";
+                position: fixed;
+                inset: 0;
+                z-index: 0;
+                pointer-events: none;
+                background: url("anchor.svg") no-repeat right bottom;
+                background-size: min(480px, 58vw);
+                opacity: 0.14;
+            }
+
+            body > .layout {
+                position: relative;
+                z-index: 1;
             }
 
             h1 {
@@ -180,6 +184,11 @@
                 border-radius: 6px;
                 background: transparent;
                 color: inherit;
+            }
+
+            .add-row input[type="text"]::placeholder {
+                color: color-mix(in srgb, var(--flotsam-muted) 88%, var(--flotsam-body));
+                opacity: 1;
             }
 
             .add-btn {

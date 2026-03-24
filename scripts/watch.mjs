@@ -14,6 +14,10 @@ execSync("cp src/options/options.html dist/options/", {
     cwd: ROOT,
     stdio: "inherit",
 });
+execSync("cp branding/icons/anchor.svg dist/options/anchor.svg", {
+    cwd: ROOT,
+    stdio: "inherit",
+});
 execSync("node scripts/generate-icons.mjs", { cwd: ROOT, stdio: "inherit" });
 execSync(
     "esbuild src/service-worker/background.ts src/options/options.ts --bundle --outdir=dist --target=es2022 --platform=browser --format=iife --define:FLOTSAM_E2E=false --watch",
