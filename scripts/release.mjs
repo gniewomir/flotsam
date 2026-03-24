@@ -43,6 +43,24 @@ if (branch !== "main") {
 }
 
 const semver = version.slice(1);
+const releaseBranch = `release/${version}`;
+
+const existingReleaseBranch = execSync(`git branch --list "${releaseBranch}"`, {
+    cwd: ROOT,
+    encoding: "utf-8",
+}).trim();
+if (existingReleaseBranch) {
+    console.error(
+        `Release branch "${releaseBranch}" already exists. Delete or reuse it before running release.`,
+    );
+    process.exit(1);
+}
+
+console.log(`\nCreating release branch ${releaseBranch} from main...`);
+execSync(`git checkout -b "${releaseBranch}"`, {
+    cwd: ROOT,
+    stdio: "inherit",
+});
 
 function updateJsonFile(filePath, updater) {
     const raw = readFileSync(filePath, "utf-8");
@@ -64,7 +82,7 @@ updateJsonFile(manifestPath, (manifest) => {
 });
 
 console.log("\nFormating files...");
-execSync("npm run prettier -- -write package.json package-lock.json src/manifest.json", {
+execSync("npm run prettier -- package.json package-lock.json src/manifest.json --write", {
     cwd: ROOT,
     stdio: "inherit",
 });
@@ -90,11 +108,11 @@ execSync(`git tag -a "${tag}" -m "release flotsam ${tag}"`, {
     cwd: ROOT,
     stdio: "inherit",
 });
-execSync(`git push`, {
+execSync(`git push -u origin HEAD`, {
     cwd: ROOT,
     stdio: "inherit",
 });
-execSync(`git push origin tag ${tag}`, {
+execSync(`git push origin ${tag}`, {
     cwd: ROOT,
     stdio: "inherit",
 });
