@@ -20,7 +20,7 @@
         "lint": "eslint",
         "store:screenshots": "node scripts/generate-store-assets.mjs",
         "store:promo": "node scripts/generate-promo.mjs",
-        "store:all": "npm run store:screenshots && npm run store:promo",
+        "store:all": "npm run store:screenshots",
         "format": "prettier --write .",
         "format:check": "prettier --check ."
     },
