@@ -9,6 +9,7 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
 import { palette } from "./lib/store-palette.mjs";
+import { writePrettierJson } from "./lib/write-prettier-json.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -108,7 +109,7 @@ async function main() {
             },
         ],
     };
-    await writeFile(manifestPath, JSON.stringify(manifest, null, 2));
+    await writePrettierJson(manifestPath, manifest);
 
     console.log(`Wrote promotional tiles to ${OUT}`);
 }

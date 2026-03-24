@@ -1,36 +1,30 @@
 {
-  "screenshots": [
-    {
-      "file": "01-hero-stale-tabs.png",
-      "description": "Hero: Flotsam name, tagline, large icon, palette gradient (Sharp)"
-    },
-    {
-      "file": "02-floating-vs-anchored.png",
-      "description": "Toolbar icon meanings (floating vs anchored)"
-    },
-    {
-      "file": "03-auto-close-timeout.png",
-      "description": "Options: auto-close timeout"
-    },
-    {
-      "file": "04-excluded-domains.png",
-      "description": "Options: excluded domains"
-    },
-    {
-      "file": "06-never-auto-closes.png",
-      "description": "Never auto-close: composed HTML slide (palette, same copy as About)"
-    }
-  ],
-  "promotional": [
-    {
-      "file": "promo-small-440x280.png",
-      "dimensions": "440x280",
-      "description": "Small promotional image (required by CWS)"
-    },
-    {
-      "file": "promo-marquee-1400x560.png",
-      "dimensions": "1400x560",
-      "description": "Marquee promotional image (optional)"
-    }
-  ]
+    "screenshots": [
+        {
+            "file": "01-hero-stale-tabs.png",
+            "description": "Hero: Flotsam name, tagline, large icon, palette gradient (Sharp)"
+        },
+        {
+            "file": "02-floating-vs-anchored.png",
+            "description": "Toolbar icon meanings (floating vs anchored)"
+        },
+        { "file": "03-auto-close-timeout.png", "description": "Options: auto-close timeout" },
+        { "file": "04-excluded-domains.png", "description": "Options: excluded domains" },
+        {
+            "file": "06-never-auto-closes.png",
+            "description": "Never auto-close: composed HTML slide (palette, same copy as About)"
+        }
+    ],
+    "promotional": [
+        {
+            "file": "promo-small-440x280.png",
+            "dimensions": "440x280",
+            "description": "Small promotional image (required by CWS)"
+        },
+        {
+            "file": "promo-marquee-1400x560.png",
+            "dimensions": "1400x560",
+            "description": "Marquee promotional image (optional)"
+        }
+    ]
 }
