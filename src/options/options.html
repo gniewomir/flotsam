@@ -5,8 +5,32 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Flotsam Settings</title>
         <style>
+            /* Values align with branding/store/palette.json (Chrome Web Store & promo palette). */
             :root {
                 color-scheme: light dark;
+                --flotsam-canvas: #e8eef5;
+                --flotsam-gradient-top: #dde8f2;
+                --flotsam-gradient-bottom: #8fa9c4;
+                --flotsam-heading: #1a2b3c;
+                --flotsam-title-strong: #0d2840;
+                --flotsam-body: #333344;
+                --flotsam-muted: #6b7b8c;
+                --flotsam-link: #1a5a8a;
+                --flotsam-card-surface: color-mix(in srgb, #ffffff 88%, var(--flotsam-canvas));
+            }
+
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    --flotsam-canvas: #0d2840;
+                    --flotsam-gradient-top: #1a2b3c;
+                    --flotsam-gradient-bottom: #0d2840;
+                    --flotsam-heading: #e8eef5;
+                    --flotsam-title-strong: #dde8f2;
+                    --flotsam-body: #c8d6e8;
+                    --flotsam-muted: #8fa9c4;
+                    --flotsam-link: #9ec5e8;
+                    --flotsam-card-surface: color-mix(in srgb, #ffffff 8%, var(--flotsam-canvas));
+                }
             }
 
             body {
@@ -17,10 +41,24 @@
                 line-height: 1.5;
                 padding: 24px;
                 max-width: 1200px;
+                min-height: 100vh;
+                box-sizing: border-box;
+                color: var(--flotsam-body);
+                background: linear-gradient(
+                    165deg,
+                    var(--flotsam-gradient-top) 0%,
+                    var(--flotsam-canvas) 42%,
+                    var(--flotsam-gradient-bottom) 100%
+                );
             }
 
             h1 {
                 margin-top: 0;
+            }
+
+            .support-column a,
+            .about-column a {
+                color: var(--flotsam-link);
             }
 
             .layout {
@@ -40,9 +78,11 @@
                 margin: 0 0 12px;
                 font-size: 1.35rem;
                 font-weight: 600;
+                color: var(--flotsam-title-strong);
             }
 
             .card {
+                background: var(--flotsam-card-surface);
                 border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
                 border-radius: 10px;
                 padding: 16px;
@@ -58,6 +98,7 @@
             .card h2 {
                 margin-top: 0;
                 font-size: 1.2rem;
+                color: var(--flotsam-heading);
             }
 
             label {
@@ -120,7 +161,7 @@
             }
 
             .empty-state {
-                opacity: 0.5;
+                color: var(--flotsam-muted);
                 font-style: italic;
                 margin: 8px 0 0;
             }
@@ -164,7 +205,7 @@
                 font-size: 0.85rem;
                 margin-top: 6px;
                 min-height: 1.3em;
-                opacity: 0.7;
+                color: var(--flotsam-muted);
             }
 
             code {
@@ -187,11 +228,7 @@
             }
 
             .behavior-list li::marker {
-                color: color-mix(in srgb, currentColor 45%, transparent);
-            }
-
-            .about-column a {
-                color: inherit;
+                color: var(--flotsam-muted);
             }
         </style>
     </head>
