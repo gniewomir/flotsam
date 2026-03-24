@@ -14,6 +14,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const OUT = join(ROOT, "branding", "store", "generated");
 
+function omitPromoGeneratedAt(obj) {
+    if (!obj || typeof obj !== "object") return {};
+    const { promoGeneratedAt, ...rest } = obj;
+    return rest;
+}
+
 /**
  * Saturated gradient background; large anchor motif; minimal or no text.
  */
@@ -87,25 +93,27 @@ async function main() {
     await writeFile(join(OUT, "promo-marquee-1400x560.png"), marquee);
 
     const manifestPath = join(OUT, "manifest.json");
-    let manifest = {};
+    let prior = {};
     try {
-        manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+        prior = JSON.parse(await readFile(manifestPath, "utf8"));
     } catch {
         /* no manifest yet */
     }
-    manifest.promoGeneratedAt = new Date().toISOString();
-    manifest.promotional = [
-        {
-            file: "promo-small-440x280.png",
-            dimensions: "440x280",
-            description: "Small promotional image (required by CWS)",
-        },
-        {
-            file: "promo-marquee-1400x560.png",
-            dimensions: "1400x560",
-            description: "Marquee promotional image (optional)",
-        },
-    ];
+    const manifest = {
+        ...omitPromoGeneratedAt(prior),
+        promotional: [
+            {
+                file: "promo-small-440x280.png",
+                dimensions: "440x280",
+                description: "Small promotional image (required by CWS)",
+            },
+            {
+                file: "promo-marquee-1400x560.png",
+                dimensions: "1400x560",
+                description: "Marquee promotional image (optional)",
+            },
+        ],
+    };
     await writeFile(manifestPath, JSON.stringify(manifest, null, 2));
 
     console.log(`Wrote promotional tiles to ${OUT}`);

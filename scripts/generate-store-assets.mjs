@@ -22,6 +22,13 @@ const ROOT = join(__dirname, "..");
 
 const GENERATED = join(ROOT, "branding", "store", "generated");
 
+/** Drops legacy manifest keys when merging a prior file. */
+function omitLegacyManifestFields(prior) {
+    if (!prior || typeof prior !== "object") return {};
+    const { generatedAt, dimensions, note, promoGeneratedAt, ...rest } = prior;
+    return rest;
+}
+
 async function waitForExtensionId(context) {
     const sw =
         context.serviceWorkers()[0] ??
@@ -102,10 +109,7 @@ async function main() {
             /* no prior manifest */
         }
         const manifest = {
-            ...prior,
-            generatedAt: new Date().toISOString(),
-            dimensions: "1280x800",
-            note: "Five listing screenshots (Chrome Web Store max per locale).",
+            ...omitLegacyManifestFields(prior),
             screenshots: [
                 {
                     file: "01-hero-stale-tabs.png",
