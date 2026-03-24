@@ -28,6 +28,7 @@ Produce all of the following:
 - Confirm option choice explicitly before finalizing the plan.
 - Use concise, actionable steps.
 - Create a draft pull request immediately after issue creation/update, even when there are no code changes yet.
+- If an existing PR for the task is already merged and additional changes are needed, create a new branch and a new draft PR.
 - Ensure the pull request is linked to the created GitHub issue.
 
 ## Workflow
@@ -177,6 +178,11 @@ EOF
 )"
 ```
 
+If a PR for this task already exists, check its state before deciding what to do:
+
+- If the PR is open, continue using that PR.
+- If the PR is merged (or otherwise closed) and more changes are needed, create a new feature branch from the default branch and open a new draft PR linked to the same issue.
+
 ## Response format to user
 
 Use this structure:
@@ -198,4 +204,5 @@ Use this structure:
 - [ ] New feature branch created and checked out.
 - [ ] GitHub issue created or updated with both plans.
 - [ ] Draft pull request is created immediately after issue creation/update (even with no code changes yet).
+- [ ] If a previous PR is merged/closed and more changes are needed, a new branch and new draft PR are created.
 - [ ] Pull request is linked to the created issue.
