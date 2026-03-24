@@ -14,12 +14,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const OUT = join(ROOT, "branding", "store", "generated");
 
-function omitPromoGeneratedAt(obj) {
-    if (!obj || typeof obj !== "object") return {};
-    const { promoGeneratedAt, ...rest } = obj;
-    return rest;
-}
-
 /**
  * Saturated gradient background; large anchor motif; minimal or no text.
  */
@@ -100,7 +94,7 @@ async function main() {
         /* no manifest yet */
     }
     const manifest = {
-        ...omitPromoGeneratedAt(prior),
+        ...prior,
         promotional: [
             {
                 file: "promo-small-440x280.png",

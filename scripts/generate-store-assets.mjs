@@ -3,10 +3,9 @@
  * Prerequisites: npm run build (invoked automatically).
  */
 import { execSync } from "child_process";
-import { mkdir, readFile, writeFile } from "fs/promises";
+import { mkdir, mkdtemp, readFile, writeFile } from "fs/promises";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
-import { mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
 import { launchExtensionContext } from "./lib/extension-launch.mjs";
 import {
@@ -21,13 +20,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 
 const GENERATED = join(ROOT, "branding", "store", "generated");
-
-/** Drops legacy manifest keys when merging a prior file. */
-function omitLegacyManifestFields(prior) {
-    if (!prior || typeof prior !== "object") return {};
-    const { generatedAt, dimensions, note, promoGeneratedAt, ...rest } = prior;
-    return rest;
-}
 
 async function waitForExtensionId(context) {
     const sw =
@@ -109,7 +101,7 @@ async function main() {
             /* no prior manifest */
         }
         const manifest = {
-            ...omitLegacyManifestFields(prior),
+            ...prior,
             screenshots: [
                 {
                     file: "01-hero-stale-tabs.png",
