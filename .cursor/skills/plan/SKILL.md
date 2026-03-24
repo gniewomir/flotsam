@@ -1,6 +1,6 @@
 ---
 name: plan
-description: Build a shared implementation plan before coding by eliciting requirements, proposing options, selecting one with the user, and producing implementation and test plans. Use when the user asks for planning, says /plan, or wants to scope a task before execution. Includes creating a feature branch and a GitHub issue documenting the final plan.
+description: Build a shared implementation plan before coding by eliciting requirements, proposing options, selecting one with the user, and producing implementation and test plans. Use when the user asks for planning, says /plan, or wants to scope a task before execution. Includes creating a feature branch, a GitHub issue, and a linked pull request even before implementation changes exist.
 ---
 
 # Plan
@@ -27,6 +27,7 @@ Produce all of the following:
 - Do not start coding while in planning flow.
 - Confirm option choice explicitly before finalizing the plan.
 - Use concise, actionable steps.
+- Create a draft pull request immediately after issue creation/update, even when there are no code changes yet.
 - Ensure the pull request is linked to the created GitHub issue.
 
 ## Workflow
@@ -142,9 +143,39 @@ If the issue already exists, update it with `gh`:
 gh issue edit <issue-number> --body-file <path-to-prepared-body.md>
 ```
 
-### 8) Ensure the pull request is linked to the issue
+### 8) Create draft pull request immediately after issue
 
-When creating the pull request, include an issue-closing reference in the PR body (for example: `Closes #<issue-number>`) so the PR is explicitly linked to the created issue.
+After the issue is created/updated, create a draft pull request right away.
+
+If there are no implementation changes yet, create an empty commit so GitHub can open a PR:
+
+```bash
+git commit --allow-empty -m "chore: open planning PR"
+git push -u origin HEAD
+```
+
+Then create the draft pull request and include an issue-closing reference in the PR body:
+
+```bash
+gh pr create --draft --title "<task title>" --body "$(cat <<'EOF'
+## Context
+<problem statement + constraints>
+
+## Selected approach
+<chosen option and rationale>
+
+## Implementation plan
+- [ ] Step 1
+- [ ] Step 2
+
+## Test plan
+- [ ] Test 1
+- [ ] Test 2
+
+Closes #<issue-number>
+EOF
+)"
+```
 
 ## Response format to user
 
@@ -166,4 +197,5 @@ Use this structure:
 - [ ] Test plan prepared.
 - [ ] New feature branch created and checked out.
 - [ ] GitHub issue created or updated with both plans.
+- [ ] Draft pull request is created immediately after issue creation/update (even with no code changes yet).
 - [ ] Pull request is linked to the created issue.
