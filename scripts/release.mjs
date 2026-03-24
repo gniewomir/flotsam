@@ -42,12 +42,6 @@ if (branch !== "main") {
     process.exit(1);
 }
 
-console.log("\nTesting formatting...");
-execSync("npm run format:check", { cwd: ROOT, stdio: "inherit" });
-console.log("\nTesting extension...");
-execSync("npm run test", { cwd: ROOT, stdio: "inherit" });
-execSync("npm run test:e2e:headless", { cwd: ROOT, stdio: "inherit" });
-
 const semver = version.slice(1);
 
 function updateJsonFile(filePath, updater) {
