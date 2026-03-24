@@ -27,3 +27,8 @@ execSync("cp branding/icons/anchor.svg dist/options/anchor.svg", {
     stdio: "inherit",
 });
 execSync("node scripts/generate-icons.mjs", { cwd: ROOT, stdio: "inherit" });
+execSync("node scripts/generate-promo.mjs", {
+    cwd: ROOT,
+    stdio: "inherit",
+    env: { ...process.env, FLOTSAM_SKIP_BUILD: "1" },
+});

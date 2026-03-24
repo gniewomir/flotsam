@@ -3,7 +3,7 @@
  * Prerequisites: npm run build (invoked automatically).
  */
 import { execSync } from "child_process";
-import { mkdir, writeFile } from "fs/promises";
+import { mkdir, readFile, writeFile } from "fs/promises";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { mkdtemp } from "fs/promises";
@@ -30,7 +30,9 @@ async function waitForExtensionId(context) {
 }
 
 async function main() {
-    execSync("npm run build", { cwd: ROOT, stdio: "inherit" });
+    if (process.env.FLOTSAM_SKIP_BUILD !== "1") {
+        execSync("npm run build", { cwd: ROOT, stdio: "inherit" });
+    }
 
     await mkdir(GENERATED, { recursive: true });
 
@@ -92,7 +94,15 @@ async function main() {
         await writeFile(join(GENERATED, "06-never-auto-closes.png"), out);
         await neverPage.close();
 
+        const manifestPath = join(GENERATED, "manifest.json");
+        let prior = {};
+        try {
+            prior = JSON.parse(await readFile(manifestPath, "utf8"));
+        } catch {
+            /* no prior manifest */
+        }
         const manifest = {
+            ...prior,
             generatedAt: new Date().toISOString(),
             dimensions: "1280x800",
             note: "Five listing screenshots (Chrome Web Store max per locale).",
@@ -121,7 +131,7 @@ async function main() {
                 },
             ],
         };
-        await writeFile(join(GENERATED, "manifest.json"), JSON.stringify(manifest, null, 2));
+        await writeFile(manifestPath, JSON.stringify(manifest, null, 2));
 
         console.log(`Wrote listing images to ${GENERATED}`);
     } finally {

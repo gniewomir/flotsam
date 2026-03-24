@@ -77,7 +77,9 @@ async function promoMarquee() {
 }
 
 async function main() {
-    execSync("npm run build", { cwd: ROOT, stdio: "inherit" });
+    if (process.env.FLOTSAM_SKIP_BUILD !== "1") {
+        execSync("npm run build", { cwd: ROOT, stdio: "inherit" });
+    }
     await mkdir(OUT, { recursive: true });
     const small = await promoSmall();
     await writeFile(join(OUT, "promo-small-440x280.png"), small);

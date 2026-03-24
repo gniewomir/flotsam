@@ -21,16 +21,18 @@ All store-facing colors (listing composites, **hero slide** (01), “never auto-
 From the repo root (01–02 are Sharp-only; Playwright uses the local unpacked extension only):
 
 ```bash
-npm run store:screenshots
-npm run store:promo
-# or both:
-npm run store:all
+npm run store:screenshots   # full build + listing screenshots
+npm run store:promo         # full build + promo tiles only
+npm run store:all           # alias for store:screenshots (full listing + manifest)
 ```
+
+`npm run build` already runs extension icons plus promotional tiles (Sharp), so routine builds keep store promos in sync with `dist/icons`.
 
 Outputs go to [`generated/`](generated/).
 
-- **`npm run store:screenshots`** — Runs `npm run build`, then Playwright + Sharp to write five listing screenshots and [`generated/manifest.json`](generated/manifest.json).
+- **`npm run store:screenshots`** — Runs `npm run build`, then Playwright + Sharp to write five listing screenshots and merge [`generated/manifest.json`](generated/manifest.json) (keeps promo fields if present).
 - **`npm run store:promo`** — Runs `npm run build`, then Sharp-only promotional tiles (`promo-small-440x280.png`, `promo-marquee-1400x560.png`).
+- **`npm run store:all`** — Alias for `store:screenshots` (one full build, then Playwright). Previously ran screenshots and promo separately, which caused two full builds; promo generation is now part of `npm run build`.
 
 ### Headless / CI
 
