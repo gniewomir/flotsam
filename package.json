@@ -8,6 +8,7 @@
     "scripts": {
         "prepare": "node scripts/install-git-hooks.mjs",
         "pre-commit": "node scripts/pre-commit.mjs",
+        "commit-msg": "node scripts/commit-msg.mjs",
         "pre-push": "node scripts/pre-push.mjs",
         "build": "node scripts/build.mjs",
         "build:e2e": "FLOTSAM_E2E=1 node scripts/build.mjs",
