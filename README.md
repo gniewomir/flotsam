@@ -54,10 +54,11 @@ npm run release -- v0.2.0
 
 The script:
 
-1. Runs `npm run format:check`, `npm test`, and `npm run test:e2e:headless`.
-2. Writes that version (without the `v`) into `package.json` and `src/manifest.json`, then runs `npm install --package-lock-only` so `package-lock.json` stays in sync.
-3. Runs `npm run build`.
-4. Commits the version files, creates an **annotated** git tag matching the argument (e.g. `v0.2.0`), and **pushes** the branch and the tag to `origin`.
+1. Creates and checks out a new branch named `release/<version>` (it fails if that branch already exists).
+2. Updates `package.json` and `src/manifest.json` to the release version (the leading `v` is stripped), then runs `npm install --package-lock-only` so `package-lock.json` stays in sync.
+3. Formats the updated files (`prettier` on the relevant JSON files, then `npm run format`).
+4. Runs `npm run build`.
+5. Commits the version bump, creates an **annotated** git tag matching the argument (e.g. `v0.2.0`), and **pushes** both the `release/<version>` branch and the tag to `origin`.
 
 Pushing the tag triggers the **Release** GitHub workflow: it rebuilds and checks the tree, zips `dist/` as `flotsam-<tag>.zip`, and publishes a GitHub Release with that artifact. Download the zip from the release page for store submission; nothing is zipped on your machine by this script.
 
