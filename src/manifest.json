@@ -5,7 +5,7 @@
     "description": "Auto-close tabs after a set time unless explicitly anchored.",
     "homepage_url": "https://github.com/gniewomir/flotsam",
     "author": "Gniewomir Świechowski",
-    "version": "0.4.4",
+    "version": "0.4.5",
     "minimum_chrome_version": "102",
     "incognito": "not_allowed",
     "permissions": ["tabs", "alarms", "storage", "contextMenus"],
