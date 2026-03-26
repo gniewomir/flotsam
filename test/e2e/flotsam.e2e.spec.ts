@@ -102,6 +102,90 @@ test("adds excluded domains with normalization", async ({ context, extensionId }
         .toEqual(["www.example.com"]);
 });
 
+test("removes excluded domains", async ({ context, extensionId }) => {
+    const optionsPage = await openOptionsPage(context, extensionId);
+
+    await optionsPage.locator("#new-domain").fill("example.com");
+    await optionsPage.locator("#add-domain-btn").click();
+
+    await expect(optionsPage.locator("#domain-list li span")).toHaveText("example.com");
+    await expect
+        .poll(async () => syncStorageGet(optionsPage, "excludedDomains"))
+        .toEqual(["example.com"]);
+
+    await optionsPage.getByRole("button", { name: "Remove example.com from exclusions" }).click();
+    await expect(optionsPage.locator("#domain-list li")).toHaveCount(0);
+    await expect.poll(async () => syncStorageGet(optionsPage, "excludedDomains")).toEqual([]);
+});
+
+test("removes excluded domains with overlap", async ({ context, extensionId }) => {
+    const optionsPage = await openOptionsPage(context, extensionId);
+
+    await optionsPage.locator("#new-domain").fill("amazon.com");
+    await optionsPage.locator("#add-domain-btn").click();
+    await optionsPage.locator("#new-domain").fill("aws.amazon.com");
+    await optionsPage.locator("#add-domain-btn").click();
+
+    await expect(optionsPage.locator("#domain-list li span")).toHaveText("aws.amazon.com");
+    await expect
+        .poll(async () => syncStorageGet(optionsPage, "excludedDomains"))
+        .toEqual(["amazon.com", "aws.amazon.com"]);
+
+    await optionsPage
+        .getByRole("button", { name: "Remove aws.amazon.com from exclusions" })
+        .click();
+    await expect(optionsPage.locator("#domain-list li")).toHaveCount(1);
+    await expect
+        .poll(async () => syncStorageGet(optionsPage, "excludedDomains"))
+        .toEqual(["amazon.com"]);
+});
+
+test("options updates recover after a single failed sync storage write", async ({
+    context,
+    extensionId,
+}) => {
+    const optionsPage = await openOptionsPage(context, extensionId);
+
+    await optionsPage.evaluate(() => {
+        const originalSet = chrome.storage.sync.set.bind(chrome.storage.sync);
+        let rejected = false;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- patching Chrome API for e2e
+        (chrome.storage.sync as any).set = async (...args: unknown[]) => {
+            if (!rejected) {
+                rejected = true;
+                throw new Error("e2e: forced chrome.storage.sync.set failure");
+            }
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- passthrough
+            return originalSet(...(args as Parameters<typeof chrome.storage.sync.set>));
+        };
+    });
+
+    // First attempt fails, but should not permanently break subsequent updates.
+    await optionsPage.locator("#new-domain").fill("example.com");
+    await optionsPage.locator("#add-domain-btn").click();
+    await expect(optionsPage.locator("#domain-list li")).toHaveCount(0);
+    await expect
+        .poll(async () => {
+            const value = await syncStorageGet(optionsPage, "excludedDomains");
+            if (value === undefined) return 0;
+            if (Array.isArray(value)) return value.length;
+            return -1;
+        })
+        .toBe(0);
+
+    // Next attempts succeed.
+    await optionsPage.locator("#new-domain").fill("example.com");
+    await optionsPage.locator("#add-domain-btn").click();
+    await expect(optionsPage.locator("#domain-list li span")).toHaveText("example.com");
+    await expect
+        .poll(async () => syncStorageGet(optionsPage, "excludedDomains"))
+        .toEqual(["example.com"]);
+
+    await optionsPage.locator("#timeout").fill("11");
+    await expect(optionsPage.locator("#timeout-status")).toHaveText("Saved.");
+    await expect.poll(async () => syncStorageGet(optionsPage, "timeoutMinutes")).toBe(11);
+});
+
 test("does not close tabs on excluded domains", async ({ context, extensionId, serviceWorker }) => {
     const optionsPage = await openOptionsPage(context, extensionId);
     await optionsPage.locator("#new-domain").fill("example.com");
