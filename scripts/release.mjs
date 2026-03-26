@@ -100,11 +100,11 @@ execSync("git add package.json package-lock.json src/manifest.json", {
     stdio: "inherit",
 });
 execSync("npm run format", { cwd: ROOT, stdio: "inherit" });
-execSync(`git commit -m "release flotsam ${tag}"`, {
+execSync(`git commit -m "build: release flotsam ${tag}"`, {
     cwd: ROOT,
     stdio: "inherit",
 });
-execSync(`git tag -a "${tag}" -m "release flotsam ${tag}"`, {
+execSync(`git tag -a "${tag}" -m "build: release flotsam ${tag}"`, {
     cwd: ROOT,
     stdio: "inherit",
 });
