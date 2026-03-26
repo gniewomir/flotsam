@@ -126,7 +126,10 @@ test("removes excluded domains with overlap", async ({ context, extensionId }) =
     await optionsPage.locator("#new-domain").fill("aws.amazon.com");
     await optionsPage.locator("#add-domain-btn").click();
 
-    await expect(optionsPage.locator("#domain-list li span")).toHaveText("aws.amazon.com");
+    await expect(optionsPage.locator("#domain-list li span")).toHaveText([
+        "amazon.com",
+        "aws.amazon.com",
+    ]);
     await expect
         .poll(async () => syncStorageGet(optionsPage, "excludedDomains"))
         .toEqual(["amazon.com", "aws.amazon.com"]);

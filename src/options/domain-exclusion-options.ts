@@ -37,9 +37,9 @@ export function initDomainExclusionOptions(args: {
             btn.className = "remove-btn";
             btn.textContent = "Remove";
             btn.setAttribute("aria-label", `Remove ${domain} from exclusions`);
-            btn.addEventListener("click", () =>
-                queue("click removeDomain", () => removeDomain(domain)),
-            );
+            btn.addEventListener("click", () => {
+                removeDomain(domain);
+            });
 
             li.appendChild(span);
             li.appendChild(btn);
