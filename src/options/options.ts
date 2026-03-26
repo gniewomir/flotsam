@@ -1,8 +1,8 @@
 import { loadConfiguration } from "../configuration";
 import { logError } from "../log";
-import { initDomainExclusionOptions } from "./domain-exclusion-options";
+import { initDomainExclusionOptions } from "./domains";
 import { queue } from "./queue";
-import { initTimeoutOptions } from "./timeout-options";
+import { initTimeoutOptions } from "./timeout";
 
 const timeoutInput = document.getElementById("timeout") as HTMLInputElement | null;
 const timeoutStatus = document.getElementById("timeout-status") as HTMLDivElement | null;
