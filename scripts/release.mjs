@@ -45,6 +45,17 @@ if (branch !== "main") {
 const semver = version.slice(1);
 const releaseBranch = `release/${version}`;
 
+const currentPackageVersion = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf-8")).version;
+const currentManifestVersion = JSON.parse(
+    readFileSync(join(ROOT, "src", "manifest.json"), "utf-8"),
+).version;
+if (currentPackageVersion === semver && currentManifestVersion === semver) {
+    console.error(
+        `Version unchanged; nothing to release. package.json and src/manifest.json are already at "${semver}".`,
+    );
+    process.exit(1);
+}
+
 const existingReleaseBranch = execSync(`git branch --list "${releaseBranch}"`, {
     cwd: ROOT,
     encoding: "utf-8",
@@ -100,6 +111,14 @@ execSync("git add package.json package-lock.json src/manifest.json", {
     stdio: "inherit",
 });
 execSync("npm run format", { cwd: ROOT, stdio: "inherit" });
+const hasStagedChanges = execSync("git diff --cached --quiet; echo $?", {
+    cwd: ROOT,
+    encoding: "utf-8",
+}).trim();
+if (hasStagedChanges === "0") {
+    console.error(`Version unchanged; nothing to release. No staged changes for ${tag}.`);
+    process.exit(1);
+}
 execSync(`git commit -m "build: release flotsam ${tag}"`, {
     cwd: ROOT,
     stdio: "inherit",
