@@ -22,6 +22,10 @@ execSync("cp src/options/options.html dist/options/", {
     cwd: ROOT,
     stdio: "inherit",
 });
+execSync("cp src/options/options.css dist/options/", {
+    cwd: ROOT,
+    stdio: "inherit",
+});
 execSync("cp branding/icons/anchor.svg dist/options/anchor.svg", {
     cwd: ROOT,
     stdio: "inherit",
