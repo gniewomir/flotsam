@@ -43,7 +43,6 @@ if (branch !== "main") {
 }
 
 const semver = version.slice(1);
-const releaseBranch = `release/${version}`;
 
 const currentPackageVersion = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf-8")).version;
 const currentManifestVersion = JSON.parse(
@@ -55,23 +54,6 @@ if (currentPackageVersion === semver && currentManifestVersion === semver) {
     );
     process.exit(1);
 }
-
-const existingReleaseBranch = execSync(`git branch --list "${releaseBranch}"`, {
-    cwd: ROOT,
-    encoding: "utf-8",
-}).trim();
-if (existingReleaseBranch) {
-    console.error(
-        `Release branch "${releaseBranch}" already exists. Delete or reuse it before running release.`,
-    );
-    process.exit(1);
-}
-
-console.log(`\nCreating release branch ${releaseBranch} from main...`);
-execSync(`git checkout -b "${releaseBranch}"`, {
-    cwd: ROOT,
-    stdio: "inherit",
-});
 
 function updateJsonFile(filePath, updater) {
     const raw = readFileSync(filePath, "utf-8");
@@ -127,7 +109,7 @@ execSync(`git tag -a "${tag}" -m "build: release flotsam ${tag}"`, {
     cwd: ROOT,
     stdio: "inherit",
 });
-execSync(`git push -u origin HEAD`, {
+execSync("git push origin main", {
     cwd: ROOT,
     stdio: "inherit",
 });
