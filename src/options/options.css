@@ -1,0 +1,233 @@
+/* Values align with branding/store/palette.json (Chrome Web Store & promo palette). */
+:root {
+    color-scheme: light dark;
+    --flotsam-canvas: #0d2840;
+    --flotsam-gradient-top: #1a2b3c;
+    --flotsam-gradient-bottom: #0d2840;
+    --flotsam-heading: #e8eef5;
+    --flotsam-title-strong: #dde8f2;
+    --flotsam-body: #c8d6e8;
+    --flotsam-muted: #8fa9c4;
+    --flotsam-link: #9ec5e8;
+    --flotsam-card-surface: color-mix(in srgb, #ffffff 8%, var(--flotsam-canvas));
+}
+
+body {
+    margin: 0 auto;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    padding: 24px;
+    max-width: 1200px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    color: var(--flotsam-body);
+    background: linear-gradient(
+        165deg,
+        var(--flotsam-gradient-top) 0%,
+        var(--flotsam-canvas) 42%,
+        var(--flotsam-gradient-bottom) 100%
+    );
+    position: relative;
+}
+
+/* branding/icons/anchor.svg (copied to dist/options/anchor.svg at build time) */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: url("anchor.svg") no-repeat right bottom;
+    background-size: min(480px, 58vw);
+    opacity: 0.14;
+}
+
+body > .layout {
+    position: relative;
+    z-index: 1;
+}
+
+h1 {
+    margin-top: 0;
+}
+
+.support-column a,
+.about-column a {
+    color: var(--flotsam-link);
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 880px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.column-heading {
+    margin: 0 0 12px;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--flotsam-title-strong);
+}
+
+.card {
+    background: var(--flotsam-card-surface);
+    border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 16px;
+}
+
+.options-column > .card:first-of-type,
+.about-column > .card:first-of-type,
+.support-column > .card:first-of-type {
+    margin-top: 0;
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: var(--flotsam-heading);
+}
+
+label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+label[for="new-domain"] {
+    margin-top: 12px;
+}
+
+input[type="number"] {
+    font-size: 1rem;
+    padding: 6px 8px;
+    border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    width: 80px;
+}
+
+.domain-list {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0;
+}
+
+.domain-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.domain-list li:last-child {
+    border-bottom: none;
+}
+
+.remove-btn {
+    background: none;
+    border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+    border-radius: 6px;
+    color: inherit;
+    cursor: pointer;
+    padding: 2px 10px;
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.remove-btn:hover {
+    opacity: 1;
+}
+
+.remove-btn:focus-visible {
+    outline: 2px solid color-mix(in srgb, currentColor 50%, transparent);
+    outline-offset: 2px;
+    opacity: 1;
+}
+
+.empty-state {
+    color: var(--flotsam-muted);
+    font-style: italic;
+    margin: 8px 0 0;
+}
+
+.add-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.add-row input[type="text"] {
+    flex: 1;
+    font-size: 1rem;
+    padding: 6px 8px;
+    border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+}
+
+.add-row input[type="text"]::placeholder {
+    color: color-mix(in srgb, var(--flotsam-muted) 88%, var(--flotsam-body));
+    opacity: 1;
+}
+
+.add-btn {
+    font-size: 0.9rem;
+    padding: 6px 14px;
+    border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
+.add-btn:hover {
+    background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.add-btn:focus-visible {
+    outline: 2px solid color-mix(in srgb, currentColor 50%, transparent);
+    outline-offset: 2px;
+}
+
+.status {
+    font-size: 0.85rem;
+    margin-top: 6px;
+    min-height: 1.3em;
+    color: var(--flotsam-muted);
+}
+
+code {
+    font-size: 0.95em;
+}
+
+.about-column ul:not(.domain-list):not(.behavior-list) {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.behavior-list {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin: 0.75rem 0 0;
+}
+
+.behavior-list li {
+    margin: 0.35em 0;
+}
+
+.behavior-list li::marker {
+    color: var(--flotsam-muted);
+}
