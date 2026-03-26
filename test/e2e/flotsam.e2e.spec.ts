@@ -155,7 +155,6 @@ test("options updates recover after a single failed sync storage write", async (
                 rejected = true;
                 throw new Error("e2e: forced chrome.storage.sync.set failure");
             }
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- passthrough
             return originalSet(...(args as Parameters<typeof chrome.storage.sync.set>));
         };
     });
