@@ -2,6 +2,7 @@ import { updateConfiguration } from "../configuration";
 import type { queue as queueFn } from "./queue";
 
 const MAX_TIMEOUT_MINUTES = 1440;
+const SAVE_DEBOUNCE_MS = 200;
 
 export type TimeoutOptionsController = {
     setTimeoutMinutes: (minutes: number) => void;
@@ -17,6 +18,7 @@ export function initTimeoutOptions(args: {
     const { timeoutInput, timeoutStatus, queue } = args;
 
     let statusClearTimer: ReturnType<typeof setTimeout> | null = null;
+    let saveDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 
     function showStatus(text: string) {
         if (statusClearTimer !== null) clearTimeout(statusClearTimer);
@@ -43,12 +45,28 @@ export function initTimeoutOptions(args: {
         }).catch(() => showStatus("Failed to save."));
     }
 
-    timeoutInput.addEventListener("input", () => {
+    function debouncePersistTimeout(): void {
+        if (saveDebounceTimer !== null) clearTimeout(saveDebounceTimer);
+        saveDebounceTimer = setTimeout(() => {
+            saveDebounceTimer = null;
+            void persistTimeoutIfValid();
+        }, SAVE_DEBOUNCE_MS);
+    }
+
+    function flushDebouncedPersistTimeout(): void {
+        if (saveDebounceTimer !== null) {
+            clearTimeout(saveDebounceTimer);
+            saveDebounceTimer = null;
+        }
         void persistTimeoutIfValid();
+    }
+
+    timeoutInput.addEventListener("input", () => {
+        debouncePersistTimeout();
     });
 
     timeoutInput.addEventListener("blur", () => {
-        void persistTimeoutIfValid();
+        flushDebouncedPersistTimeout();
     });
 
     document.addEventListener("visibilitychange", () => {
