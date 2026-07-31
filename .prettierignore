@@ -1,2 +1,4 @@
 branding/store/generated/*
 !branding/store/generated/manifest.json
+.agents/
+skills-lock.json
