@@ -28,7 +28,7 @@ export async function toggleAnchorForManagedTab(
     }
     const isAnchored = state.anchoredTabs.has(tabId);
     const variant = isAnchored ? "anchored" : "floating";
-    const title = isAnchored ? "Flotsam (anchored)" : "Flotsam (will auto-close)";
+    const title = isAnchored ? "Flotsam (anchored)" : "Flotsam (floating)";
 
     try {
         await Promise.all([

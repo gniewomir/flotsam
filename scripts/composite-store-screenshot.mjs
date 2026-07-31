@@ -28,7 +28,7 @@ export async function fitToStore(buffer) {
 }
 
 /**
- * Options card element screenshot: scale down so the card sits inside a max box, then center
+ * Settings card element screenshot: scale down so the card sits inside a max box, then center
  * on 1280×800 with listing.canvas (blueish) as margin — no HTML padding tricks.
  * Ratios: palette.listing.cardFrame
  * @param {Buffer} buffer
@@ -68,7 +68,7 @@ export async function fitCardScreenshotToStore(buffer) {
 const EXTENSION_NAME = "Flotsam";
 /** Two short lines (store hero); behavior matches src/manifest.json */
 const HERO_SUBTITLE_LINE1 = "Auto-close tabs after a set time unless you anchor them.";
-const HERO_SUBTITLE_LINE2 = "Click the toolbar icon to anchor tabs you want to keep.";
+const HERO_SUBTITLE_LINE2 = "Click the toolbar icon to anchor tabs you want to stay open.";
 
 /**
  * Store listing hero (01): large anchored icon, blueish gradient, name + subtitle. Pure Sharp.
@@ -198,7 +198,7 @@ export async function composeFloatingVsAnchored(repoRoot) {
         `<svg width="${colW}" height="${STORE_H}" xmlns="http://www.w3.org/2000/svg">
   <rect width="100%" height="100%" fill="${splitPanel.leftBackground.hex}"/>
   <text x="50%" y="${titleY}" text-anchor="middle" dominant-baseline="middle" fill="${splitPanel.heading.hex}" font-family="system-ui, -apple-system, sans-serif" font-size="${titleFont}" font-weight="600">Floating</text>
-  <text x="50%" y="${subtitleY}" text-anchor="middle" dominant-baseline="middle" fill="${splitPanel.subtitle.hex}" font-family="system-ui, -apple-system, sans-serif" font-size="${subFont}">Flotsam (will auto-close)</text>
+  <text x="50%" y="${subtitleY}" text-anchor="middle" dominant-baseline="middle" fill="${splitPanel.subtitle.hex}" font-family="system-ui, -apple-system, sans-serif" font-size="${subFont}">Flotsam (floating)</text>
 </svg>`,
     );
     const rightSvg = Buffer.from(

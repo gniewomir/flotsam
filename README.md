@@ -4,15 +4,15 @@ A browser extension that auto-closes tabs after a set time unless you explicitly
 
 ## Why
 
-Tabs accumulate. What starts as a quick lookup turns into dozens of stale pages silently consuming memory and attention. Flotsam flips the default: tabs are temporary unless you decide otherwise. The ones you care about get anchored; the rest drift away on their own.
+Tabs accumulate. What starts as a quick lookup turns into dozens of stale pages silently consuming memory and attention. Flotsam flips the default: tabs are floating unless you decide otherwise. The ones you care about get anchored; the rest drift away on their own.
 
 ## How it works
 
 ### Basics
 
 1. Install the extension.
-2. Each tab on a **managed domain** (standard **http** or **https** addresses) gets a countdown (default **15 minutes**; you can change this in **Flotsam Settings**).
-3. If you change the timeout value, Flotsam resets timers using the new value.
+2. Each **managed tab** (standard **http** or **https** addresses) gets a countdown (default **15 minutes**; you can change this in **Flotsam Settings**).
+3. If you change the timeout value, Flotsam resets countdowns using the new value.
 4. When the countdown finishes, that tab closes automatically.
 5. Click the toolbar icon to **anchor** the current tab — it stays open until you unanchor it.
 6. Click again to **unanchor**; the countdown applies again from there.
@@ -29,7 +29,7 @@ You can **exclude entire domains** so their tabs are never auto-closed. Add or r
 - **Grouped** tabs.
 - Tabs on **excluded** domains.
 - Tabs the browser treats as **audible** (playing sound). Muted tabs and silent playback are not treated as audible.
-- Tabs **outside normal web domains** (anything that isn’t a standard **http** or **https** tab) — for example built-in browser pages, settings, or local files opened in the browser. **Flotsam only applies to http and https tabs.**
+- Tabs that are not **managed tabs** (anything that isn’t a standard **http** or **https** tab) — for example built-in browser pages, settings, or local files opened in the browser. **Flotsam only applies to http and https tabs.**
 
 ## Development
 

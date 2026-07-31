@@ -16,7 +16,8 @@ test.describe("options page copy", () => {
     test("surfaces key settings and about phrases", async ({ context, extensionId }) => {
         const page = await openOptionsPage(context, extensionId);
 
-        await expect(page.locator('label[for="timeout"]')).toContainText("resets all timers");
+        await expect(page.locator("#settings-heading")).toHaveText("Settings");
+        await expect(page.locator('label[for="timeout"]')).toContainText("resets all countdowns");
         await expect(page.locator("#timeout")).toHaveAttribute("min", "1");
         await expect(page.locator("#timeout")).toHaveAttribute("max", "1440");
 
@@ -27,6 +28,8 @@ test.describe("options page copy", () => {
         const about = page.locator("#about");
         await expect(about).toContainText("HTTP");
         await expect(about).toContainText("HTTPS");
+        await expect(about).toContainText("floating");
+        await expect(about).toContainText("managed tab");
         await expect(about).toContainText("toolbar icon");
         await expect(about).toContainText("anchor");
         await expect(about).toContainText("Exclude tab domain");
@@ -37,6 +40,7 @@ test.describe("options page copy", () => {
         await expect(bullets.filter({ hasText: /grouped/ })).toHaveCount(1);
         await expect(bullets.filter({ hasText: /excluded/ })).toHaveCount(1);
         await expect(bullets.filter({ hasText: /audible/ })).toHaveCount(1);
+        await expect(bullets.filter({ hasText: /managed tabs/ })).toHaveCount(1);
     });
 
     test("support links have expected href and rel", async ({ context, extensionId }) => {
@@ -196,21 +200,21 @@ test("does not close tabs on excluded domains", async ({ context, extensionId, s
         .poll(async () => syncStorageGet(optionsPage, "excludedDomains"))
         .toEqual(["example.com"]);
 
-    const protectedTabId = await serviceWorker.evaluate(async () => {
+    const excludedDomainTabId = await serviceWorker.evaluate(async () => {
         const tab = await chrome.tabs.create({
             url: "https://www.example.com/",
             active: false,
         });
         return tab.id ?? -1;
     });
-    expect(protectedTabId).toBeGreaterThan(0);
+    expect(excludedDomainTabId).toBeGreaterThan(0);
 
     await serviceWorker.evaluate(async () => {
         await chrome.tabs.create({ url: "about:blank", active: true });
     });
 
-    await triggerCloseAlarm(serviceWorker, protectedTabId);
-    await expect.poll(() => tabExists(serviceWorker, protectedTabId)).toBe(true);
+    await triggerCloseAlarm(serviceWorker, excludedDomainTabId);
+    await expect.poll(() => tabExists(serviceWorker, excludedDomainTabId)).toBe(true);
 });
 
 test("schedules close alarms for https and http managed tabs", async ({ serviceWorker }) => {
@@ -262,12 +266,12 @@ test("does not schedule close alarms for about:blank", async ({ serviceWorker })
     await expect.poll(async () => getCloseAlarmForTab(serviceWorker, tabId)).toBeUndefined();
 });
 
-test("does not close the active tab when its close alarm fires (reschedules instead)", async ({
+test("does not close the focused tab when its close alarm fires (reschedules instead)", async ({
     serviceWorker,
 }) => {
     const soloTabId = await serviceWorker.evaluate(async () => {
         const tab = await chrome.tabs.create({
-            url: "https://example.com/solo-active",
+            url: "https://example.com/solo-focused",
             active: true,
         });
         return tab.id ?? -1;

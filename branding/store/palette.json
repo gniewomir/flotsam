@@ -20,7 +20,7 @@
         "cardFrame": {
             "maxWidthRatio": 1,
             "maxHeightRatio": 1,
-            "usage": "Options card screenshots (03/04): card scaled to fit within this fraction of the 1280×800 frame (1 = full frame, letterboxed on listing.canvas if aspect differs), centered"
+            "usage": "Settings card screenshots (03/04): card scaled to fit within this fraction of the 1280×800 frame (1 = full frame, letterboxed on listing.canvas if aspect differs), centered"
         }
     },
     "splitPanel": {
@@ -98,7 +98,7 @@
         },
         "heading": {
             "hex": "#000000",
-            "usage": "Slide title (matches options About copy)"
+            "usage": "Slide title (matches Settings About copy)"
         },
         "body": {
             "hex": "#000000",
@@ -106,7 +106,7 @@
         },
         "bullet": {
             "hex": "#6b7b8c",
-            "usage": "List marker color (muted, like options)"
+            "usage": "List marker color (muted, like Settings)"
         }
     }
 }

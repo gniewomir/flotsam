@@ -53,7 +53,7 @@ async function main() {
         const page = await context.newPage();
         await page.setViewportSize({ width: 1280, height: 800 });
 
-        // Options-driven captures
+        // Settings-driven captures
         await page.goto(`chrome-extension://${extensionId}/options/options.html`, {
             waitUntil: "domcontentloaded",
         });
@@ -85,7 +85,7 @@ async function main() {
         out = await fitCardScreenshotToStore(raw);
         await writeFile(join(GENERATED, "04-excluded-domains.png"), out);
 
-        // 06 — never auto-closes (composed HTML slide; copy matches options About list)
+        // 06 — never auto-closes (composed HTML slide; copy matches Settings About list)
         const neverPage = await context.newPage();
         await neverPage.setViewportSize({ width: 1280, height: 800 });
         await neverPage.setContent(getNeverAutoCloseSlideHtml(), { waitUntil: "domcontentloaded" });
@@ -115,11 +115,11 @@ async function main() {
                 },
                 {
                     file: "03-auto-close-timeout.png",
-                    description: "Options: auto-close timeout",
+                    description: "Settings: auto-close timeout",
                 },
                 {
                     file: "04-excluded-domains.png",
-                    description: "Options: excluded domains",
+                    description: "Settings: excluded domains",
                 },
                 {
                     file: "06-never-auto-closes.png",

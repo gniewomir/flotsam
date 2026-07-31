@@ -50,13 +50,13 @@ If Chromium fails to load the extension headlessly, run without `HEADLESS` on a 
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `01-hero-stale-tabs.png`      | Composed hero: **Flotsam** title, two-line tagline, large anchored icon, `heroSlide` gradient ([`palette.json`](palette.json)).                                |
 | `02-floating-vs-anchored.png` | Composed explainer: 1.3× title/subtitle/icons, vertically centered in each half ([`composeFloatingVsAnchored`](../../scripts/composite-store-screenshot.mjs)). |
-| `03-auto-close-timeout.png`   | Real **Options** card (timeout), scaled and centered on **listing.canvas** margin ([`palette.json`](palette.json) `listing.cardFrame`).                        |
+| `03-auto-close-timeout.png`   | Real **Settings** card (timeout), scaled and centered on **listing.canvas** margin ([`palette.json`](palette.json) `listing.cardFrame`).                       |
 | `04-excluded-domains.png`     | Same treatment for excluded domains card.                                                                                                                      |
 | `06-never-auto-closes.png`    | Composed **HTML** slide (header + list, same copy as About); palette gradient + black text.                                                                    |
 
 ## Implementation notes
 
-- **Options cards (03 & 04):** Raw card screenshots are composited with [`fitCardScreenshotToStore`](../../scripts/composite-store-screenshot.mjs) — smaller card centered on the blueish `listing.canvas` color; tune **`listing.cardFrame`** in [`palette.json`](palette.json).
+- **Settings cards (03 & 04):** Raw card screenshots are composited with [`fitCardScreenshotToStore`](../../scripts/composite-store-screenshot.mjs) — smaller card centered on the blueish `listing.canvas` color; tune **`listing.cardFrame`** in [`palette.json`](palette.json).
 - **Shared Chromium launch** for E2E tests lives in [`test/helpers/extension-launch.ts`](../../test/helpers/extension-launch.ts). The Node store script duplicates the same logic in [`scripts/lib/extension-launch.mjs`](../../scripts/lib/extension-launch.mjs) — **keep both in sync** when changing launch flags or paths.
 - **Compositing** helpers: [`scripts/composite-store-screenshot.mjs`](../../scripts/composite-store-screenshot.mjs).
 - **Palette** loader: [`scripts/lib/store-palette.mjs`](../../scripts/lib/store-palette.mjs) + [`palette.json`](palette.json).

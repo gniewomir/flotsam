@@ -99,8 +99,8 @@ export function getNeverAutoCloseSlideHtml() {
       are not treated as audible.
     </li>
     <li>
-      tabs
-      <strong>outside normal web domains</strong>
+      tabs that are not
+      <strong>managed tabs</strong>
       (anything that isn’t a standard
       <strong>HTTP</strong> or <strong>HTTPS</strong> tab) — for example
       built-in browser pages, settings, or local files opened in the browser.

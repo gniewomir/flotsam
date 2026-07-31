@@ -8,8 +8,8 @@
             "file": "02-floating-vs-anchored.png",
             "description": "Toolbar icon meanings (floating vs anchored)"
         },
-        { "file": "03-auto-close-timeout.png", "description": "Options: auto-close timeout" },
-        { "file": "04-excluded-domains.png", "description": "Options: excluded domains" },
+        { "file": "03-auto-close-timeout.png", "description": "Settings: auto-close timeout" },
+        { "file": "04-excluded-domains.png", "description": "Settings: excluded domains" },
         {
             "file": "06-never-auto-closes.png",
             "description": "Never auto-close: composed HTML slide (palette, same copy as About)"

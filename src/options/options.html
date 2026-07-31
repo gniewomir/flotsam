@@ -9,12 +9,12 @@
     <body>
         <div class="layout">
             <aside class="options-column" id="settings" aria-labelledby="settings-heading">
-                <h2 class="column-heading" id="settings-heading">Options</h2>
+                <h2 class="column-heading" id="settings-heading">Settings</h2>
 
                 <div class="card">
                     <h2>Auto-close timeout</h2>
                     <label for="timeout"
-                        >Close tabs after (minutes) &mdash; resets all timers</label
+                        >Close tabs after (minutes) &mdash; resets all countdowns</label
                     >
                     <input type="number" id="timeout" min="1" max="1440" step="1" />
                     <div class="status" id="timeout-status"></div>
@@ -39,11 +39,11 @@
                     <p>
                         Tabs accumulate. What starts as a quick lookup turns into dozens of stale
                         pages silently consuming memory and attention. Flotsam flips the default:
-                        tabs are temporary unless you decide otherwise. The ones you care about get
+                        tabs are floating unless you decide otherwise. The ones you care about get
                         anchored; the rest drift away on their own.
                     </p>
                     <p>
-                        After you install, each tab on a domain Flotsam manages (ordinary
+                        After you install, each <strong>managed tab</strong> (ordinary
                         <strong>HTTP</strong> and <strong>HTTPS</strong> addresses) gets a
                         countdown. When the countdown finishes, that tab closes automatically.
                     </p>
@@ -76,8 +76,8 @@
                             are not treated as audible.
                         </li>
                         <li>
-                            tabs
-                            <strong>outside normal web domains</strong>
+                            tabs that are not
+                            <strong>managed tabs</strong>
                             (anything that isn’t a standard
                             <strong>HTTP</strong> or <strong>HTTPS</strong> tab) — for example
                             built-in browser pages, settings, or local files opened in the browser.
