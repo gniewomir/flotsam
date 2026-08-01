@@ -2,11 +2,15 @@ import { describe, expect, it } from "vitest";
 import { TAB_GROUP_ID_NONE, tabEligibleToBeClosed } from "./tab-eligibility";
 
 describe("tabAllowsCloseAlarmScheduling", () => {
-    const base: Pick<chrome.tabs.Tab, "url" | "pinned" | "id" | "audible" | "groupId"> = {
+    const base: Pick<
+        chrome.tabs.Tab,
+        "url" | "pinned" | "id" | "audible" | "groupId" | "mutedInfo"
+    > = {
         id: 44,
         pinned: false,
         groupId: TAB_GROUP_ID_NONE,
         audible: false,
+        mutedInfo: { muted: false },
         url: "https://example.com/",
     };
 
@@ -26,7 +30,7 @@ describe("tabAllowsCloseAlarmScheduling", () => {
         expect(tabEligibleToBeClosed({ ...base, groupId: 1 }, new Set<number>())).toBe(false);
     });
 
-    it("rejects audible tabs", () => {
+    it("rejects Audible tabs (playing and not muted)", () => {
         expect(tabEligibleToBeClosed({ ...base, audible: true }, new Set<number>())).toBe(false);
     });
 
@@ -36,7 +40,20 @@ describe("tabAllowsCloseAlarmScheduling", () => {
         ).toBe(false);
     });
 
-    it("treats muted / non-playing as not audible (audible false)", () => {
+    it("allows scheduling when not playing sound", () => {
         expect(tabEligibleToBeClosed({ ...base, audible: false }, new Set<number>())).toBe(true);
+    });
+
+    it("allows scheduling when muted even if Chrome still reports audible", () => {
+        expect(
+            tabEligibleToBeClosed(
+                {
+                    ...base,
+                    audible: true,
+                    mutedInfo: { muted: true },
+                },
+                new Set<number>(),
+            ),
+        ).toBe(true);
     });
 });

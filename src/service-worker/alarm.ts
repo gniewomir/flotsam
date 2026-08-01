@@ -3,7 +3,7 @@ import { queue, queueStateful } from "./state";
 import { isManagedUrl } from "./utility";
 import { extractDomain } from "../utility";
 import { Configuration } from "../configuration";
-import { TAB_GROUP_ID_NONE, tabEligibleToBeClosed } from "./tab-eligibility";
+import { TAB_GROUP_ID_NONE, isAudible, tabEligibleToBeClosed } from "./tab-eligibility";
 
 export const ALARM_PREFIX = "close-tab-";
 
@@ -113,7 +113,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
             return {};
         }
 
-        if (tab.audible === true) {
+        if (isAudible(tab)) {
             await scheduleTabAlarm(tabId, state.timeoutMinutes, state.anchoredTabs);
             return {};
         }
@@ -143,6 +143,10 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
             await scheduleTabAlarm(tabId, state.timeoutMinutes, state.anchoredTabs);
         }
         if (changeInfo.audible === false) {
+            await scheduleTabAlarm(tabId, state.timeoutMinutes, state.anchoredTabs);
+        }
+        // Mute does not clear `audible`; muted tabs are not Audible — start Countdown.
+        if (changeInfo.mutedInfo?.muted === true) {
             await scheduleTabAlarm(tabId, state.timeoutMinutes, state.anchoredTabs);
         }
         return {};
