@@ -206,11 +206,13 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 chrome.storage.sync.onChanged.addListener((changeInfo) => {
     queueStateful("chrome.storage.sync.onChanged - alarms", async (state) => {
         /**
-         * note: if timeout changed reschedule all alarms with a new setting,
-         *       state is updated before updating storage, so we can depend on it,
-         *       instead looking at the change info
+         * Reschedule when timeout or exclusions change. In-memory state is reloaded
+         * from sync storage on the same change (state.ts, earlier in the queue), so
+         * we can depend on `state` rather than reading values from changeInfo.
          */
-        if (("timeoutMinutes" satisfies keyof Configuration) in changeInfo) {
+        const timeoutChanged = ("timeoutMinutes" satisfies keyof Configuration) in changeInfo;
+        const exclusionsChanged = ("excludedDomains" satisfies keyof Configuration) in changeInfo;
+        if (timeoutChanged || exclusionsChanged) {
             await rescheduleAll(state.timeoutMinutes, state.anchoredTabs);
         }
         return {};

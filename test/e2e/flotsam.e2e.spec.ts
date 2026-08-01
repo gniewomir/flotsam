@@ -217,6 +217,47 @@ test("does not close tabs on excluded domains", async ({ context, extensionId, s
     await expect.poll(() => tabExists(serviceWorker, excludedDomainTabId)).toBe(true);
 });
 
+test("restores countdown after removing excluded domain once alarm has fired", async ({
+    context,
+    extensionId,
+    serviceWorker,
+}) => {
+    const optionsPage = await openOptionsPage(context, extensionId);
+    await optionsPage.locator("#new-domain").fill("example.com");
+    await optionsPage.locator("#add-domain-btn").click();
+    await expect
+        .poll(async () => syncStorageGet(optionsPage, "excludedDomains"))
+        .toEqual(["example.com"]);
+
+    const tabId = await serviceWorker.evaluate(async () => {
+        const tab = await chrome.tabs.create({
+            url: "https://www.example.com/unexclude-countdown",
+            active: false,
+        });
+        return tab.id ?? -1;
+    });
+    expect(tabId).toBeGreaterThan(0);
+
+    await serviceWorker.evaluate(async () => {
+        await chrome.tabs.create({ url: "about:blank", active: true });
+    });
+
+    await expect.poll(() => getCloseAlarmForTab(serviceWorker, tabId)).toBeDefined();
+
+    await triggerCloseAlarm(serviceWorker, tabId);
+    await expect.poll(() => tabExists(serviceWorker, tabId)).toBe(true);
+    // Excluded fire path returns without reschedule — countdown is gone.
+    await expect.poll(() => getCloseAlarmForTab(serviceWorker, tabId)).toBeUndefined();
+
+    await optionsPage.getByRole("button", { name: "Remove example.com from exclusions" }).click();
+    await expect.poll(async () => syncStorageGet(optionsPage, "excludedDomains")).toEqual([]);
+
+    // Without another tab event, Countdown should still be restored for the Floating tab.
+    await expect
+        .poll(() => getCloseAlarmForTab(serviceWorker, tabId), { timeout: 10_000 })
+        .toBeDefined();
+});
+
 test("schedules close alarms for https and http managed tabs", async ({ serviceWorker }) => {
     const httpsId = await serviceWorker.evaluate(async () => {
         const tab = await chrome.tabs.create({
